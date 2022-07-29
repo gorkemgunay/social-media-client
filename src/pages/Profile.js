@@ -68,12 +68,9 @@ function Profile() {
   }, [userPosts]);
 
   const handleLogout = async () => {
-    const response = await axiosPrivate.post(
-      "http://localhost:4000/user/logout",
-      {
-        refreshToken: localStorage.getItem("user"),
-      },
-    );
+    const response = await axiosPrivate.post("/user/logout", {
+      refreshToken: localStorage.getItem("user"),
+    });
     const data = response?.data;
     if (data) {
       localStorage.removeItem("user");
