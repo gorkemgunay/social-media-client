@@ -40,12 +40,10 @@ function Profile() {
   }, [userId]);
 
   useEffect(() => {
-    if (userPosts) {
-      socket.on("getUserNewPost", (newPost) => {
-        setUserPosts((prev) => [newPost, ...prev]);
-      });
-    }
-  }, [userPosts]);
+    socket.on("getUserNewPost", (newPost) => {
+      setUserPosts((prev) => [newPost, ...prev]);
+    });
+  }, []);
 
   useEffect(() => {
     if (userPosts) {

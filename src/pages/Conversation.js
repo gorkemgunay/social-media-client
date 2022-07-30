@@ -31,7 +31,6 @@ function Conversation() {
   }, []);
 
   useEffect(() => {
-    // scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     scrollRef.current?.scrollIntoView();
   }, [messages]);
 
@@ -53,6 +52,7 @@ function Conversation() {
         });
         values.text = "";
       }
+      values.text = "";
     },
   });
 
