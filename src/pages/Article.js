@@ -39,11 +39,11 @@ function Article() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8">
+      <div className="max-w-2xl mx-auto pt-8 px-4">
         <h2 className="mb-4">Post Page</h2>
         {content}
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }

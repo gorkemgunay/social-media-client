@@ -108,13 +108,13 @@ function Post({ post, substring = false, showComments = false }) {
             <div className="flex items-center gap-2">
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50"
+                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
                 onClick={() => setShowModal(true)}>
                 Update
               </Button>
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50"
+                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
                 onClick={async () => {
                   const response = await axiosPrivate.delete(
                     `/posts/${post._id}`,

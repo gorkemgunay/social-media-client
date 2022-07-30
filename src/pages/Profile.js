@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
 import {
   Header,
   Button,
@@ -8,27 +8,31 @@ import {
   Post,
   CreatePost,
   Footer,
+  ProfileSettings,
+  Followers,
+  Following,
 } from "../components";
-import { useAuthContext } from "../contexts/AuthContext";
 import { useSocketContext } from "../contexts/SocketContext";
-import useAxiosPrivate from "../useAxiosPrivate";
 import { useHandleFetchPostsUser } from "../api/post";
 import { useHandleFetchUser, useHandleFetchUserProfile } from "../api/user";
+import useAxiosPrivate from "../useAxiosPrivate";
 
 function Profile() {
-  const [showModal, setShowModal] = useState(false);
-
-  const navigate = useNavigate();
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [showProfileSettingsModal, setShowProfileSettingsModal] =
+    useState(false);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
+  const [disableFollowButton, setDisableFollowButton] = useState(false);
   const { userId } = useParams();
 
-  const { setAccessToken } = useAuthContext();
-  const { socket, setSocket } = useSocketContext();
+  const { socket } = useSocketContext();
 
   const axiosPrivate = useAxiosPrivate();
 
   const { userPosts, setUserPosts } = useHandleFetchPostsUser(userId);
   const { profile, setProfile } = useHandleFetchUserProfile(userId);
-  const { user, setUser } = useHandleFetchUser();
+  const { user } = useHandleFetchUser();
 
   useEffect(() => {
     setProfile(null);
@@ -67,20 +71,73 @@ function Profile() {
     }
   }, [userPosts]);
 
-  const handleLogout = async () => {
-    const response = await axiosPrivate.post("/user/logout", {
-      refreshToken: localStorage.getItem("user"),
-    });
+  useEffect(() => {
+    if (profile) {
+      socket.on("getFollower", (follower) => {
+        if (follower.profile === profile?._id) {
+          setProfile({
+            ...profile,
+            followers: [...profile.followers, follower.user],
+          });
+        }
+        if (follower.user === profile?._id) {
+          setProfile({
+            ...profile,
+            following: [...profile.following, follower.user],
+          });
+        }
+      });
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    if (profile) {
+      socket.on("getUnfollower", (unfollower) => {
+        if (
+          unfollower.profile === profile?._id ||
+          user?._id === unfollower.user._id
+        ) {
+          setProfile({
+            ...profile,
+            followers: profile.followers.filter(
+              (p) => p._id !== unfollower.user._id,
+            ),
+          });
+        }
+        if (unfollower.user._id === profile?._id) {
+          setProfile({
+            ...profile,
+            following: profile.following.filter(
+              (u) => u._id !== unfollower.user._id,
+            ),
+          });
+        }
+      });
+    }
+  }, [profile]);
+
+  const handleFetchFollow = async () => {
+    setDisableFollowButton(true);
+    const response = await axiosPrivate.get(`/follow/${userId}`);
     const data = response?.data;
     if (data) {
-      localStorage.removeItem("user");
-      setAccessToken(null);
-      setUser(null);
-      setSocket(null);
-      socket.disconnect();
-      toast.success("Successfully logout.");
-      navigate("/login", { replace: true });
+      socket.emit("followUser", { user, profile: profile?._id });
+      toast.success("Successfully followed.");
+      setDisableFollowButton(false);
     }
+    setDisableFollowButton(false);
+  };
+
+  const handleFetchUnfollow = async () => {
+    setDisableFollowButton(true);
+    const response = await axiosPrivate.delete(`/follow/${userId}`);
+    const data = response?.data;
+    if (data) {
+      socket.emit("unfollowUser", { user, profile: profile?._id });
+      toast.success("Successfully unfollowed.");
+      setDisableFollowButton(false);
+    }
+    setDisableFollowButton(false);
   };
 
   let profileContent;
@@ -93,39 +150,66 @@ function Profile() {
     );
   } else if (profile) {
     profileContent = (
-      <div>
+      <div className="w-full flex items-center justify-center flex-col gap-4">
+        <div className="flex items-center justify-center flex-col gap-1">
+          <h2 className="capitalize">
+            {profile.name} {profile.surname}
+          </h2>
+          <small>{profile.email}</small>
+        </div>
+        <div className="flex items-center gap-8">
+          <button
+            type="button"
+            className="flex items-center flex-col gap-1"
+            onClick={() => setShowFollowers(true)}>
+            <p className="font-bold">{profile?.followers?.length}</p>
+            <h5 className="text-sm">Followers</h5>
+          </button>
+          <button
+            type="button"
+            className="flex items-center flex-col gap-1"
+            onClick={() => setShowFollowing(true)}>
+            <p className="font-bold">{profile?.following?.length}</p>
+            <h5 className="text-sm">Following</h5>
+          </button>
+        </div>
         <div className="flex items-center gap-4">
-          <div className="w-full flex items-center justify-between">
-            <h3 className="capitalize">
-              {profile.name} {profile.surname}
-            </h3>
-            {user?._id === profile?._id && (
+          {user?._id !== profile?._id &&
+            (profile.followers.some((p) => p._id === user?._id) ? (
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50"
-                onClick={handleLogout}>
-                Logout
+                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+                disabled={disableFollowButton}
+                onClick={() => handleFetchUnfollow()}>
+                Unfollow
               </Button>
-            )}
-          </div>
-          {user?._id !== profile?._id && (
+            ) : (
+              <Button
+                type="button"
+                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+                disabled={disableFollowButton}
+                onClick={() => handleFetchFollow()}>
+                Follow
+              </Button>
+            ))}
+          {user?._id === profile?._id && (
             <Button
-              onClick={async () => {
-                const response = await axiosPrivate.post("/conversation", {
-                  receiverId: profile?._id,
-                });
-                const data = response?.data;
-                if (data) {
-                  navigate(`/conversation/${data._id}`);
-                }
-              }}
               type="button"
-              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50">
-              Send Message
+              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+              onClick={() => setShowCreatePostModal(true)}>
+              Create Post
+            </Button>
+          )}
+
+          {user?._id === profile?._id && (
+            <Button
+              type="button"
+              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+              onClick={() => setShowProfileSettingsModal(true)}>
+              Settings
             </Button>
           )}
         </div>
-        <small>{profile.email}</small>
       </div>
     );
     if (!userPosts) {
@@ -150,22 +234,30 @@ function Profile() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8">
-        <h2 className="mb-4">Profile Page</h2>
+      <div className="max-w-2xl mx-auto pt-8 px-4">
         {profileContent}
-        {user?._id === profile?._id && (
-          <Button
-            type="button"
-            className="my-4 text-sm"
-            onClick={() => setShowModal(true)}>
-            Create Post
-          </Button>
+        {showCreatePostModal && (
+          <CreatePost setShowModal={setShowCreatePostModal} />
         )}
-        {showModal && <CreatePost setShowModal={setShowModal} />}
-        <h4 className="mb-4">User Posts</h4>
+        {showProfileSettingsModal && (
+          <ProfileSettings setShowModal={setShowProfileSettingsModal} />
+        )}
+        {showFollowers && (
+          <Followers
+            followers={profile?.followers}
+            setShowFollowers={setShowFollowers}
+          />
+        )}
+        {showFollowing && (
+          <Following
+            following={profile?.following}
+            setShowFollowing={setShowFollowing}
+          />
+        )}
+        <h4 className="my-4">User Posts</h4>
         {userPostsContent}
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }

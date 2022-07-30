@@ -107,7 +107,7 @@ function Conversation() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8">
+      <div className="max-w-2xl mx-auto pt-8 px-4">
         {receiverContent}
         {messagesContent}
         <Form onSubmit={formik.handleSubmit} className="mt-4">

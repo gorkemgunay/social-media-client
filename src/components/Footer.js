@@ -37,7 +37,7 @@ function Footer() {
   }
 
   return (
-    <div className="my-8">
+    <div className="max-w-2xl mx-auto px-4 my-8">
       <h4 className="mb-4">Active Users</h4>
       <div className="flex items-center gap-4">{content}</div>
     </div>

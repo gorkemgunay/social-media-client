@@ -1,6 +1,6 @@
 import React from "react";
 
-function Input({ label, error, className, touch, ...props }) {
+function Input({ label = "", error = false, className = "", ...props }) {
   return (
     <label className="w-full">
       <div className="text-sm">{label}</div>
