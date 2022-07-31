@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Article from "./pages/Article";
 import Users from "./pages/Users";
 import Conversation from "./pages/Conversation";
+import Messages from "./pages/Messages";
 import { PersistLogin, Redirect } from "./components";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/post/:postId" element={<Article />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/messages" element={<Messages />} />
         <Route
           path="/conversation/:conversationId"
           element={<Conversation />}

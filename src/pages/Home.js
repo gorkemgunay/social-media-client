@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { Footer, Header, Post, PostsList } from "../components";
 import { useSocketContext } from "../contexts/SocketContext";
+import { useNotificationsContext } from "../contexts/NotificationsContext";
 import { useHandleFetchUser } from "../api/user";
 import { useHandleFetchPosts } from "../api/post";
 
 function Home() {
   const { socket } = useSocketContext();
-
   const { posts, setPosts } = useHandleFetchPosts();
+  const { notifications, setNotifications } = useNotificationsContext();
   useHandleFetchUser();
 
   useEffect(() => {
@@ -38,6 +39,19 @@ function Home() {
     }
   }, [posts]);
 
+  useEffect(() => {
+    socket.on("getCreateMessageNotification", (messageNotification) => {
+      const checkIfExist = notifications.some(
+        (notification) =>
+          notification.conversationId === messageNotification.conversationId &&
+          notification.status === messageNotification.status,
+      );
+      if (!checkIfExist) {
+        setNotifications((prev) => [messageNotification, ...prev]);
+      }
+    });
+  }, []);
+
   let content;
   if (!posts) {
     content = <p>Loading...</p>;
@@ -60,7 +74,7 @@ function Home() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8 px-4">
+      <div className="max-w-4xl mx-auto pt-8 px-4">
         <h2 className="mb-4">Home Page</h2>
         {content}
       </div>

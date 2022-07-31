@@ -7,6 +7,7 @@ import App from "./App";
 import UserProvider from "./contexts/UserContext";
 import AuthProvider from "./contexts/AuthContext";
 import SocketProvider from "./contexts/SocketContext";
+import NotificationsProvider from "./contexts/NotificationsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -15,8 +16,10 @@ root.render(
     <AuthProvider>
       <UserProvider>
         <SocketProvider>
-          <Toaster position="top-right" reverseOrder={false} />
-          <App />
+          <NotificationsProvider>
+            <Toaster position="top-right" reverseOrder={false} />
+            <App />
+          </NotificationsProvider>
         </SocketProvider>
       </UserProvider>
     </AuthProvider>

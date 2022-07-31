@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useUserContext } from "../contexts/UserContext";
 import NotificationsList from "./NotificationsList";
-import Notification from "./Notification";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useSocketContext } from "../contexts/SocketContext";
 import ProfileMenu from "./ProfileMenu";
+import { useNotificationsContext } from "../contexts/NotificationsContext";
 
 function Header() {
   const [openNotification, setOpenNotification] = useState(false);
@@ -18,6 +18,7 @@ function Header() {
   const { setAccessToken } = useAuthContext();
   const { socket, setSocket } = useSocketContext();
   const { user, setUser } = useUserContext();
+  const { notifications } = useNotificationsContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,7 +68,7 @@ function Header() {
 
   return (
     <header className="text-slate-900 border-b border-b-slate-100">
-      <nav className="h-10 max-w-2xl px-4 flex items-center justify-between w-full mx-auto">
+      <nav className="h-10 max-w-4xl px-4 flex items-center justify-between w-full mx-auto">
         <Link to="/">Social Media</Link>
         <ul className="flex items-center gap-8">
           <li>
@@ -76,6 +77,10 @@ function Header() {
 
           <li>
             <Link to="/users">Users</Link>
+          </li>
+
+          <li>
+            <Link to="/messages">Messages</Link>
           </li>
 
           <li className="relative" ref={notificationRef}>
@@ -87,11 +92,12 @@ function Header() {
               className="text-sm font-semibold">
               Notifications
             </button>
-            <NotificationsList openNotification={openNotification}>
-              <Notification />
-              <Notification />
-              <Notification />
-            </NotificationsList>
+            <NotificationsList openNotification={openNotification} />
+            {notifications.length !== 0 && (
+              <span className="flex items-center justify-center text-[10px] font-bold absolute bg-red-600 w-3 h-3 text-slate-50 rounded-full -bottom-[7.5px] left-1/2 -translate-x-1/2">
+                {notifications.length}
+              </span>
+            )}
           </li>
 
           <li className="relative" ref={profileRef}>

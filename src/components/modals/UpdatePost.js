@@ -39,7 +39,7 @@ function UpdatePost({ post, setShowModal }) {
   return (
     <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center transition-all bg-black/40">
       <Form
-        className="max-w-2xl w-full flex-col p-8 bg-white rounded-xl"
+        className="max-w-4xl w-full flex-col p-8 bg-white rounded-xl"
         onSubmit={formik.handleSubmit}>
         <h3>Update Post</h3>
         <Input

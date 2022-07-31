@@ -99,7 +99,7 @@ function Post({ post, substring = false, showComments = false }) {
     <>
       {showModal && <UpdatePost post={post} setShowModal={setShowModal} />}
       <div className="p-8 flex flex-col gap-4 border border-slate-100 rounded-xl">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <Link to={`/post/${post._id}`}>
             <h3 className="inline-block text-indigo-600">{post.title}</h3>
           </Link>

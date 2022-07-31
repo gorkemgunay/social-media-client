@@ -7,7 +7,7 @@ import { useSocketContext } from "../contexts/SocketContext";
 
 function Users() {
   const [users, setUsers] = useState(null);
-  const [search, setSearch] = useState("");
+  const [searchUsersResult, setSearchUsersResult] = useState(null);
   const { user, setUser } = useUserContext();
   const { socket } = useSocketContext();
   const navigate = useNavigate();
@@ -30,6 +30,7 @@ function Users() {
       const data = response?.data;
       const filteredData = data.filter((filter) => filter._id !== user._id);
       setUsers(filteredData);
+      setSearchUsersResult(filteredData);
     };
     if (user) {
       handleFetchUsers();
@@ -49,11 +50,11 @@ function Users() {
     content = <p>Loading...</p>;
   } else if (users) {
     content = (
-      <div className="flex flex-col gap-4">
-        {users.map((currentUser) => (
+      <div className="max-h-96 overflow-scroll flex flex-col gap-4">
+        {searchUsersResult.map((currentUser) => (
           <div
             key={currentUser._id}
-            className="flex items-center justify-between gap-4 px-4 h-16 rounded border border-slate-100">
+            className="flex items-center justify-between gap-4 px-4 py-4 h-16 rounded border border-slate-100">
             <p className="text-sm font-semibold capitalize">
               {currentUser.name} {currentUser.surname}
             </p>
@@ -88,10 +89,10 @@ function Users() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8 px-4">
+      <div className="max-w-4xl mx-auto pt-8 px-4">
         <h2 className="mb-4">Users Page</h2>
         <div className="mb-4">
-          <Search search={search} setSearch={setSearch} />
+          <Search users={users} setSearchUsersResult={setSearchUsersResult} />
         </div>
         {content}
       </div>

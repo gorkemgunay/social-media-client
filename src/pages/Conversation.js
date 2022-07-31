@@ -46,9 +46,17 @@ function Conversation() {
       });
       const data = response?.data;
       if (data) {
+        const notification = await axiosPrivate.post("/notification", {
+          type: "message",
+          receiverId: receiver._id,
+        });
         socket.emit("createMessage", {
           ...data,
           receiverId: receiver._id,
+        });
+        socket.emit("createMessageNotification", {
+          ...notification?.data,
+          sender: user,
         });
         values.text = "";
       }
@@ -107,7 +115,7 @@ function Conversation() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8 px-4">
+      <div className="max-w-4xl mx-auto pt-8 px-4">
         {receiverContent}
         {messagesContent}
         <Form onSubmit={formik.handleSubmit} className="mt-4">

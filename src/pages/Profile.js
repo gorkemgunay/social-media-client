@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   Header,
@@ -33,6 +33,8 @@ function Profile() {
   const { userPosts, setUserPosts } = useHandleFetchPostsUser(userId);
   const { profile, setProfile } = useHandleFetchUserProfile(userId);
   const { user } = useHandleFetchUser();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setProfile(null);
@@ -190,6 +192,23 @@ function Profile() {
                 Follow
               </Button>
             ))}
+
+          {user?._id !== profile?._id && (
+            <Button
+              onClick={async () => {
+                const response = await axiosPrivate.post("/conversation", {
+                  receiverId: profile?._id,
+                });
+                const data = response?.data;
+                if (data) {
+                  navigate(`/conversation/${data._id}`);
+                }
+              }}
+              type="button"
+              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100">
+              Send Message
+            </Button>
+          )}
           {user?._id === profile?._id && (
             <Button
               type="button"
@@ -232,7 +251,7 @@ function Profile() {
   return (
     <>
       <Header />
-      <div className="max-w-2xl mx-auto pt-8 px-4">
+      <div className="max-w-4xl mx-auto pt-8 px-4">
         {profileContent}
         {showCreatePostModal && (
           <CreatePost setShowModal={setShowCreatePostModal} />

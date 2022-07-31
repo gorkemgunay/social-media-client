@@ -5,7 +5,7 @@ import Button from "../Button";
 function Followers({ followers, setShowFollowers }) {
   return (
     <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center transition-all bg-black/40">
-      <div className="max-w-2xl w-full flex-col p-8 bg-white rounded-xl">
+      <div className="max-w-4xl w-full flex-col p-8 bg-white rounded-xl">
         <h3 className="mb-4">Followers</h3>
         <div className="flex flex-col gap-4 max-h-96 overflow-scroll">
           {followers.map((follower) => (

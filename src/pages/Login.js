@@ -41,7 +41,7 @@ function Login() {
   });
 
   return (
-    <div className="max-w-2xl px-4 h-full flex items-center justify-center flex-col mx-auto">
+    <div className="max-w-4xl px-4 h-full flex items-center justify-center flex-col mx-auto">
       <h2 className="mb-4">Login Page</h2>
       <Form onSubmit={formik.handleSubmit} className="flex-col w-full">
         <Input
