@@ -1,6 +1,8 @@
+import { useHandleFetchUser } from "../api/user";
 import { Header, Footer } from "../components";
 
 function Messages() {
+  useHandleFetchUser();
   return (
     <>
       <Header />

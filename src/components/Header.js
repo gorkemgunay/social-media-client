@@ -89,12 +89,15 @@ function Header() {
               onClick={() => {
                 setOpenNotification(!openNotification);
               }}
-              className="text-sm font-semibold">
+              className="text-sm font-semibold relative z-[1]">
               Notifications
             </button>
-            <NotificationsList openNotification={openNotification} />
+            <NotificationsList
+              openNotification={openNotification}
+              setOpenNotification={setOpenNotification}
+            />
             {notifications.length !== 0 && (
-              <span className="flex items-center justify-center text-[10px] font-bold absolute bg-red-600 w-3 h-3 text-slate-50 rounded-full -bottom-[7.5px] left-1/2 -translate-x-1/2">
+              <span className="flex items-center justify-center text-[10px] font-bold absolute bg-red-600 w-3 h-3 text-slate-50 rounded-full -bottom-[7.5px] left-1/2 -translate-x-1/2 z-0 pointer-events-none">
                 {notifications.length}
               </span>
             )}

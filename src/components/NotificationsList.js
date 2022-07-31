@@ -4,10 +4,19 @@ import { useSocketContext } from "../contexts/SocketContext";
 import useAxiosPrivate from "../useAxiosPrivate";
 import Notification from "./Notification";
 
-function NotificationsList({ openNotification }) {
+function NotificationsList({ openNotification, setOpenNotification }) {
   const { notifications, setNotifications } = useNotificationsContext();
   const { socket } = useSocketContext();
   const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    if (notifications && notifications.length !== 0) {
+      document.title = `(${notifications.length}) Social Media`;
+    }
+    if (notifications.length === 0) {
+      document.title = "Social Media";
+    }
+  }, [notifications]);
 
   useEffect(() => {
     const handleFetchNotifications = async () => {
@@ -47,6 +56,7 @@ function NotificationsList({ openNotification }) {
           id={conversation._id}
           type={conversation.type}
           sender={conversation.sender}
+          setOpenNotification={setOpenNotification}
         />
       ))}
 
