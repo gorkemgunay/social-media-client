@@ -31,7 +31,7 @@ function NotificationsList({ openNotification, setOpenNotification }) {
     socket.on("getNewMessageNotification", (notification) => {
       setNotifications((prev) => [notification, ...prev]);
     });
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     if (notifications) {
