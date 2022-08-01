@@ -26,6 +26,9 @@ function Post({ post, substring = false, showComments = false }) {
         setComments((prev) => [...prev, newComment]);
       }
     });
+    return () => {
+      socket.off("getNewComment");
+    };
   }, []);
 
   useEffect(() => {
@@ -40,6 +43,10 @@ function Post({ post, substring = false, showComments = false }) {
         }
       });
     }
+
+    return () => {
+      socket.off("getDeletedComment");
+    };
   }, [comments]);
 
   const formik = useFormik({

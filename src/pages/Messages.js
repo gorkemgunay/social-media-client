@@ -15,12 +15,13 @@ function Messages() {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
 
-  console.log(notifications);
-
   useEffect(() => {
     socket.on("getConversation", (newConversation) => {
       setConversations((prev) => [...prev, newConversation]);
     });
+    return () => {
+      socket.off("getConversation");
+    };
   }, []);
 
   return (

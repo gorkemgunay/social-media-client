@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -13,6 +14,13 @@ function App() {
   // const url =
   //   "https://d9olupt5igjta.cloudfront.net/samples/sample_files/71017/6002484fa6ed0e3f78e984542caecdd0a4b3c6b6/mp3/_Discord_Message.mp3?1619010662";
   // const audio = new Audio(url);
+
+  useEffect(() => {
+    const dark = localStorage.getItem("theme");
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
 
   return (
     <Routes>

@@ -43,6 +43,10 @@ function Users() {
         setUsers((prev) => [...prev, registeredUser]);
       });
     }
+
+    return () => {
+      socket.off("getRegisteredUser");
+    };
   }, [users]);
 
   let content;

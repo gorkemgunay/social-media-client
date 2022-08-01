@@ -45,6 +45,9 @@ function Profile() {
     socket.on("getUserNewPost", (newPost) => {
       setUserPosts((prev) => [newPost, ...prev]);
     });
+    return () => {
+      socket.off("getUserNewPost");
+    };
   }, []);
 
   useEffect(() => {
@@ -59,6 +62,9 @@ function Profile() {
         setUserPosts(updatedUserPosts);
       });
     }
+    return () => {
+      socket.off("getUserUpdatedPost");
+    };
   }, [userPosts]);
 
   useEffect(() => {
@@ -69,6 +75,9 @@ function Profile() {
         );
       });
     }
+    return () => {
+      socket.off("getDeletedUserPost");
+    };
   }, [userPosts]);
 
   useEffect(() => {

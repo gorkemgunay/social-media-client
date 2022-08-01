@@ -11,12 +11,19 @@ function Footer() {
     if (user) {
       socket.emit("userConnect", user);
     }
+    return () => {
+      socket.off("userConnect");
+    };
   }, [user]);
 
   useEffect(() => {
     socket.on("getOnlineUsers", (data) => {
       setOnlineUsers(data);
     });
+
+    return () => {
+      socket.off("getOnlineUsers");
+    };
   }, []);
 
   let content;

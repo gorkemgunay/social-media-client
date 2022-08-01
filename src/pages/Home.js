@@ -1,20 +1,21 @@
 import { useEffect } from "react";
 import { Footer, Header, Post, PostsList } from "../components";
 import { useSocketContext } from "../contexts/SocketContext";
-import { useNotificationsContext } from "../contexts/NotificationsContext";
 import { useHandleFetchUser } from "../api/user";
 import { useHandleFetchPosts } from "../api/post";
 
 function Home() {
   const { socket } = useSocketContext();
   const { posts, setPosts } = useHandleFetchPosts();
-  const { notifications, setNotifications } = useNotificationsContext();
   useHandleFetchUser();
 
   useEffect(() => {
     socket.on("getNewPost", (newPost) => {
       setPosts((prev) => [newPost, ...prev]);
     });
+    return () => {
+      socket.off("getNewPost");
+    };
   }, []);
 
   useEffect(() => {
@@ -29,6 +30,9 @@ function Home() {
         setPosts(updatedPosts);
       });
     }
+    return () => {
+      socket.off("getUpdatedPost");
+    };
   }, [posts]);
 
   useEffect(() => {
@@ -37,20 +41,11 @@ function Home() {
         setPosts(posts.filter((post) => post._id !== deletedPost._id));
       });
     }
-  }, [posts]);
 
-  useEffect(() => {
-    socket.on("getCreateMessageNotification", (messageNotification) => {
-      const checkIfExist = notifications.some(
-        (notification) =>
-          notification.conversationId === messageNotification.conversationId &&
-          notification.status === messageNotification.status,
-      );
-      if (!checkIfExist) {
-        setNotifications((prev) => [messageNotification, ...prev]);
-      }
-    });
-  }, []);
+    return () => {
+      socket.off("getDeletedPost");
+    };
+  }, [posts]);
 
   let content;
   if (!posts) {

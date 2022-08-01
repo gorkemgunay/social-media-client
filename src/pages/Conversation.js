@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { Link, useParams } from "react-router-dom";
 import useAxiosPrivate from "../useAxiosPrivate";
@@ -9,6 +9,8 @@ import { useHandleFetchConversation } from "../api/conversation";
 import { useNotificationsContext } from "../contexts/NotificationsContext";
 
 function Conversation() {
+  const [onlineUsers, setOnlineUsers] = useState(null);
+  const [online, setOnline] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const { conversationId } = useParams();
   const { messages, setMessages, receiver } =
@@ -22,7 +24,28 @@ function Conversation() {
     if (user) {
       socket.emit("userConnect", user);
     }
+
+    return () => {
+      socket.off("userConnect");
+    };
   }, [user]);
+
+  useEffect(() => {
+    socket.on("getOnlineUsers", (data) => {
+      setOnlineUsers(data);
+    });
+
+    return () => {
+      socket.off("getOnlineUsers");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (receiver) {
+      const isOnline = onlineUsers.some((u) => u._id === receiver?._id);
+      setOnline(isOnline);
+    }
+  }, [receiver, onlineUsers]);
 
   useEffect(() => {
     socket.on("getNewMessage", (newMessage) => {
@@ -90,12 +113,20 @@ function Conversation() {
     receiverContent = <p>Loading...</p>;
   } else if (receiver) {
     receiverContent = (
-      <div>
+      <div className="flex items-center gap-8 mb-4">
         <Link to={`/profile/${receiver._id}`}>
-          <h2 className="mb-4 inline-block capitalize">
+          <h2 className="inline-block capitalize">
             {receiver.name} {receiver.surname}
           </h2>
         </Link>
+        <p
+          className={`text-sm rounded px-2 font-semibold ${
+            online
+              ? "!bg-green-100 !text-green-600"
+              : "!bg-red-100 !text-red-600"
+          }`}>
+          {online ? "Online" : "Offline"}
+        </p>
       </div>
     );
     if (!messages) {

@@ -31,6 +31,9 @@ function NotificationsList({ openNotification, setOpenNotification }) {
     socket.on("getNewMessageNotification", (notification) => {
       setNotifications((prev) => [notification, ...prev]);
     });
+    return () => {
+      socket.off("getNewMessageNotification");
+    };
   }, []);
 
   useEffect(() => {
@@ -43,6 +46,10 @@ function NotificationsList({ openNotification, setOpenNotification }) {
         );
       });
     }
+
+    return () => {
+      socket.off("getDeletedMessageNotification");
+    };
   }, [notifications]);
 
   return (

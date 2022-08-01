@@ -17,6 +17,9 @@ function Article() {
         setPost(updatedPost);
       });
     }
+    return () => {
+      socket.off("getUpdatedPost");
+    };
   }, [post]);
 
   useEffect(() => {
@@ -27,6 +30,9 @@ function Article() {
         }
       });
     }
+    return () => {
+      socket.off("getDeletedPost");
+    };
   }, [post]);
 
   let content;
