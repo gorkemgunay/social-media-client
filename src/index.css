@@ -6,7 +6,7 @@
   html,
   body,
   #root {
-    @apply h-full antialiased bg-white !text-slate-900 dark:!bg-black dark:!text-slate-50;
+    @apply min-h-screen antialiased bg-white !text-slate-900 dark:!bg-black dark:!text-slate-50;
   }
 
   h1,
