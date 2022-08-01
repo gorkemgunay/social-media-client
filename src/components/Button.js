@@ -4,7 +4,7 @@ function Button({ disabled, className, children, onClick, loading, ...props }) {
   return (
     <button
       type="submit"
-      className={`flex items-center justify-center whitespace-nowrap h-10 px-6 cursor-pointer font-semibold text-slate-50 bg-indigo-600 dark:bg-indigo-800 rounded transition disabled:bg-indigo-50 disabled:text-indigo-50 disabled:dark:bg-indigo-700 disabled:cursor-not-allowed ${className}`}
+      className={`flex items-center justify-center whitespace-nowrap h-10 px-6 cursor-pointer font-semibold text-slate-50 bg-indigo-600 dark:bg-indigo-800 rounded transition disabled:bg-indigo-50 disabled:text-indigo-600 disabled:dark:text-indigo-200 disabled:dark:bg-indigo-600 disabled:cursor-not-allowed ${className}`}
       disabled={disabled}
       onClick={onClick}
       {...props}>
