@@ -6,7 +6,7 @@
   html,
   body,
   #root {
-    @apply h-full antialiased;
+    @apply h-full antialiased bg-white !text-slate-900 dark:!bg-black dark:!text-slate-50;
   }
 
   h1,
@@ -15,14 +15,14 @@
   h4,
   h5,
   h6 {
-    @apply font-bold text-slate-900;
+    @apply font-bold text-slate-900 dark:text-slate-50;
   }
 
   p,
   small,
   input,
   label {
-    @apply text-slate-900;
+    @apply text-slate-900 dark:text-slate-50;
   }
 
   h1 {
@@ -51,5 +51,11 @@
 
   a {
     @apply text-sm font-semibold;
+  }
+}
+
+@layer components {
+  .primary-small-btn {
+    @apply !px-2 !h-6 text-xs !text-indigo-600 !bg-indigo-50 dark:!text-indigo-100 dark:!bg-indigo-800 transition-colors hover:!bg-indigo-100 hover:dark:!bg-indigo-700;
   }
 }

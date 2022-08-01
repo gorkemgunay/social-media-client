@@ -39,7 +39,7 @@ function CreatePost({ setShowModal }) {
   return (
     <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center transition-all bg-black/40">
       <Form
-        className="max-w-4xl w-full flex-col p-8 bg-white rounded-xl"
+        className="max-w-4xl w-full flex-col p-8 bg-white dark:bg-slate-900 rounded-xl"
         onSubmit={formik.handleSubmit}>
         <h3>Create Post</h3>
         <Input
@@ -71,7 +71,7 @@ function CreatePost({ setShowModal }) {
         </Button>
         <Button
           type="button"
-          className="bg-red-500 text-sm"
+          className="bg-red-500 dark:bg-red-700 text-sm"
           onClick={() => setShowModal(false)}>
           Close
         </Button>

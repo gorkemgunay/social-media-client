@@ -33,3 +33,22 @@ export const useHandleFetchConversation = (conversationId) => {
 
   return { messages, setMessages, receiver, setReceiver };
 };
+
+export const useHandleFetchUserConversations = () => {
+  const [conversations, setConversations] = useState(null);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    const getConversations = async () => {
+      const response = await axiosPrivate.get("/conversation/user");
+      const data = response?.data;
+      setConversations(data);
+    };
+    if (!conversations) {
+      getConversations();
+    }
+  }, [conversations]);
+
+  return { conversations, setConversations };
+};

@@ -116,6 +116,16 @@ function Profile() {
     }
   }, [profile]);
 
+  useEffect(() => {
+    if (profile) {
+      socket.on("getBiography", (updatedBiography) => {
+        if (updatedBiography.profileId === profile?._id) {
+          setProfile({ ...profile, biography: updatedBiography.biography });
+        }
+      });
+    }
+  }, [profile]);
+
   const handleFetchFollow = async () => {
     setDisableFollowButton(true);
     const response = await axiosPrivate.get(`/follow/${userId}`);
@@ -178,7 +188,7 @@ function Profile() {
             (profile.followers.some((p) => p._id === user?._id) ? (
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+                className="primary-small-btn"
                 disabled={disableFollowButton}
                 onClick={() => handleFetchUnfollow()}>
                 Unfollow
@@ -186,7 +196,7 @@ function Profile() {
             ) : (
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+                className="primary-small-btn"
                 disabled={disableFollowButton}
                 onClick={() => handleFetchFollow()}>
                 Follow
@@ -201,18 +211,23 @@ function Profile() {
                 });
                 const data = response?.data;
                 if (data) {
+                  socket.emit("createConversation", {
+                    ...data,
+                    users: [...user, ...profile],
+                    receiver: profile._id,
+                  });
                   navigate(`/conversation/${data._id}`);
                 }
               }}
               type="button"
-              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100">
+              className="primary-small-btn">
               Send Message
             </Button>
           )}
           {user?._id === profile?._id && (
             <Button
               type="button"
-              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+              className="primary-small-btn"
               onClick={() => setShowCreatePostModal(true)}>
               Create Post
             </Button>
@@ -221,7 +236,7 @@ function Profile() {
           {user?._id === profile?._id && (
             <Button
               type="button"
-              className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+              className="primary-small-btn"
               onClick={() => setShowProfileSettingsModal(true)}>
               Settings
             </Button>
@@ -233,7 +248,7 @@ function Profile() {
       userPostsContent = <p>Loading...</p>;
     } else if (userPosts.length === 0) {
       userPostsContent = (
-        <div className="p-4 my-4 text-yellow-600 bg-yellow-50 rounded">
+        <div className="p-4 my-4 text-yellow-600 bg-yellow-50 dark:text-yellow-50 dark:bg-yellow-600 rounded">
           No posts yet.
         </div>
       );
@@ -257,7 +272,10 @@ function Profile() {
           <CreatePost setShowModal={setShowCreatePostModal} />
         )}
         {showProfileSettingsModal && (
-          <ProfileSettings setShowModal={setShowProfileSettingsModal} />
+          <ProfileSettings
+            profile={profile}
+            setShowModal={setShowProfileSettingsModal}
+          />
         )}
         {showFollowers && (
           <Followers
@@ -270,6 +288,12 @@ function Profile() {
             following={profile?.following}
             setShowFollowing={setShowFollowing}
           />
+        )}
+        {profile?.biography && (
+          <div className="flex flex-col gap-2 pt-4">
+            <h4>Biography</h4>
+            <p>{profile?.biography}</p>
+          </div>
         )}
         <h4 className="my-4">User Posts</h4>
         {userPostsContent}

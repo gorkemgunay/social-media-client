@@ -9,7 +9,7 @@ function Notification({ id, type, sender, setOpenNotification }) {
   const axiosPrivate = useAxiosPrivate();
 
   return (
-    <div className="flex items-center justify-between gap-1 h-14 px-4 text-sm cursor-pointer transition-colors hover:bg-slate-50">
+    <div className="flex items-center justify-between gap-1 h-14 px-4 text-sm cursor-pointer transition-colors bg-white hover:bg-slate-50 dark:bg-slate-900 hover:dark:bg-slate-800">
       <p>
         <Link
           to={`/profile/${sender._id}`}
@@ -20,7 +20,7 @@ function Notification({ id, type, sender, setOpenNotification }) {
       </p>
       <Button
         type="button"
-        className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+        className="primary-small-btn"
         onClick={async () => {
           const response = await axiosPrivate.delete(`/notification/${id}`);
           const data = response?.data;

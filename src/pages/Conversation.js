@@ -6,6 +6,7 @@ import { Header, Form, Input, Button } from "../components";
 import { useSocketContext } from "../contexts/SocketContext";
 import { useHandleFetchUser } from "../api/user";
 import { useHandleFetchConversation } from "../api/conversation";
+import { useNotificationsContext } from "../contexts/NotificationsContext";
 
 function Conversation() {
   const axiosPrivate = useAxiosPrivate();
@@ -14,6 +15,7 @@ function Conversation() {
     useHandleFetchConversation(conversationId);
   const { user } = useHandleFetchUser();
   const { socket } = useSocketContext();
+  const { notifications } = useNotificationsContext();
   const scrollRef = useRef();
 
   useEffect(() => {
@@ -64,6 +66,24 @@ function Conversation() {
     },
   });
 
+  useEffect(() => {
+    const getFilteredNotification = notifications.find(
+      (n) => n.receiver === user?._id && n.sender._id === receiver?._id,
+    );
+    const handleDeleteNotification = async () => {
+      const response = await axiosPrivate.delete(
+        `/notification/${getFilteredNotification?._id}`,
+      );
+      const data = response?.data;
+      if (data) {
+        socket.emit("deleteMessageNotification", data);
+      }
+    };
+    if (getFilteredNotification && notifications) {
+      handleDeleteNotification();
+    }
+  }, [user, receiver, notifications]);
+
   let receiverContent;
   let messagesContent;
   if (!receiver) {
@@ -82,7 +102,7 @@ function Conversation() {
       messagesContent = <p>Loading...</p>;
     } else if (messages) {
       messagesContent = (
-        <div className="p-8 flex flex-col gap-4 h-[calc(100vh-224px)] border border-slate-100 rounded-lg overflow-y-scroll">
+        <div className="p-8 flex flex-col gap-4 h-[calc(100vh-224px)] border border-slate-100 dark:border-slate-900 rounded-lg overflow-y-scroll">
           {messages.map((message) =>
             message.user === user?._id ? (
               <div
@@ -92,7 +112,7 @@ function Conversation() {
                 <small className="self-end">
                   {user.name} {user.surname}
                 </small>
-                <p className="py-2 px-4 w-fit max-w-xs self-end bg-indigo-600 text-slate-50 rounded-3xl">
+                <p className="py-2 px-4 w-fit max-w-xs self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
                   {message.text}
                 </p>
               </div>
@@ -101,7 +121,7 @@ function Conversation() {
                 <small>
                   {receiver.name} {receiver.surname}
                 </small>
-                <p className="py-2 px-4 w-fit max-w-xs shadow rounded-3xl">
+                <p className="py-2 px-4 w-fit max-w-xs shadow dark:shadow-white/25 rounded-3xl">
                   {message.text}
                 </p>
               </div>

@@ -49,7 +49,7 @@ function NotificationsList({ openNotification, setOpenNotification }) {
     <div
       className={`absolute top-10 right-0 ${
         !openNotification && "hidden"
-      } flex flex-col w-80 shadow bg-white rounded`}>
+      } flex flex-col w-80 shadow bg-white dark:bg-slate-900 overflow-hidden rounded`}>
       {notifications.map((conversation) => (
         <Notification
           key={conversation._id}
@@ -61,7 +61,7 @@ function NotificationsList({ openNotification, setOpenNotification }) {
       ))}
 
       {notifications.length === 0 && (
-        <div className="flex items-center h-14 px-4 text-sm transition-colors hover:bg-slate-50">
+        <div className="flex items-center h-14 px-4 text-sm transition-colors bg-white hover:bg-slate-50 dark:bg-slate-900 hover:dark:bg-slate-800">
           <p>There is no notification here.</p>
         </div>
       )}

@@ -12,7 +12,7 @@ function Comment({ comment }) {
   const axiosPrivate = useAxiosPrivate();
 
   return (
-    <div className="flex flex-col gap-2 p-4 border border-slate-100 rounded">
+    <div className="flex flex-col gap-2 p-4 border border-slate-100 dark:border-slate-900 rounded">
       <div className="flex items-center justify-between">
         <Link to={`/profile/${comment.user._id}`}>
           <small className="text-slate-400 capitalize">
@@ -22,7 +22,7 @@ function Comment({ comment }) {
         {comment.user._id === user._id && (
           <Button
             type="button"
-            className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50"
+            className="primary-small-btn"
             onClick={async () => {
               const response = await axiosPrivate.delete(
                 `/comment/${comment._id}`,
@@ -33,6 +33,7 @@ function Comment({ comment }) {
                 toast.success("Comment deleted successfully.");
               }
             }}>
+            {" "}
             Delete
           </Button>
         )}

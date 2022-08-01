@@ -98,23 +98,23 @@ function Post({ post, substring = false, showComments = false }) {
   return (
     <>
       {showModal && <UpdatePost post={post} setShowModal={setShowModal} />}
-      <div className="p-8 flex flex-col gap-4 border border-slate-100 rounded-xl">
+      <div className="p-8 flex flex-col gap-4 border border-slate-100 dark:border-slate-900 rounded-xl">
         <div className="flex items-center justify-between gap-4">
           <Link to={`/post/${post._id}`}>
-            <h3 className="inline-block text-indigo-600">{post.title}</h3>
+            <h3 className="inline-block !text-indigo-600">{post.title}</h3>
           </Link>
 
           {user?._id === post.user._id && (
             <div className="flex items-center gap-2">
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+                className="primary-small-btn"
                 onClick={() => setShowModal(true)}>
                 Update
               </Button>
               <Button
                 type="button"
-                className="px-2 h-6 text-xs text-indigo-600 bg-indigo-50 transition-colors hover:bg-indigo-100"
+                className="primary-small-btn"
                 onClick={async () => {
                   const response = await axiosPrivate.delete(
                     `/posts/${post._id}`,

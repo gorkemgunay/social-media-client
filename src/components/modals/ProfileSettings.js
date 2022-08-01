@@ -1,26 +1,42 @@
 import React from "react";
+import toast from "react-hot-toast";
 import { useFormik } from "formik";
-import { useUserContext } from "../../contexts/UserContext";
 import Form from "../Form";
 import Input from "../Input";
 import Textarea from "../Textarea";
 import Button from "../Button";
+import useAxiosPrivate from "../../useAxiosPrivate";
+import { useSocketContext } from "../../contexts/SocketContext";
 
-function ProfileSettings({ setShowModal }) {
-  const { user } = useUserContext();
+function ProfileSettings({ profile, setShowModal }) {
+  const axiosPrivate = useAxiosPrivate();
+  const { socket } = useSocketContext();
 
   const formik = useFormik({
     initialValues: {
-      name: user?.name,
-      surname: user?.surname,
-      biography: user?.biography,
+      name: profile?.name,
+      surname: profile?.surname,
+      biography: profile?.biography,
     },
-    onSubmit: async () => {},
+    onSubmit: async (values) => {
+      const response = await axiosPrivate.post("/user/update", {
+        biography: values.biography,
+      });
+      const data = response?.data;
+      if (data) {
+        socket.emit("updateBiography", {
+          profileId: profile?._id,
+          biography: values.biography,
+        });
+        toast.success("Profile updated successfully.");
+        setShowModal(false);
+      }
+    },
   });
   return (
     <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center transition-all bg-black/40">
       <Form
-        className="max-w-4xl w-full flex-col p-8 bg-white rounded-xl"
+        className="max-w-4xl w-full flex-col p-8 bg-white dark:bg-slate-900 rounded-xl"
         onSubmit={formik.handleSubmit}>
         <h3>Profile Settings</h3>
         <Input
@@ -30,6 +46,7 @@ function ProfileSettings({ setShowModal }) {
           onChange={formik.handleChange}
           value={formik.values.name}
           error={formik.errors.name}
+          disabled
         />
         <Input
           name="surname"
@@ -38,14 +55,15 @@ function ProfileSettings({ setShowModal }) {
           onChange={formik.handleChange}
           value={formik.values.surname}
           error={formik.errors.surname}
+          disabled
         />
         <Textarea
           name="biography"
           label="Profile Biography"
           placeholder="Please enter biography."
           onChange={formik.handleChange}
-          value={formik.values.body}
-          error={formik.errors.body}
+          value={formik.values.biography}
+          error={formik.errors.biography}
         />
         <Button
           className="text-sm"
@@ -60,7 +78,7 @@ function ProfileSettings({ setShowModal }) {
         </Button>
         <Button
           type="button"
-          className="bg-red-500 text-sm"
+          className="bg-red-500 dark:bg-red-700 text-sm"
           onClick={() => setShowModal(false)}>
           Close
         </Button>

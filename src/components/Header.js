@@ -12,6 +12,9 @@ import { useNotificationsContext } from "../contexts/NotificationsContext";
 function Header() {
   const [openNotification, setOpenNotification] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const [darkTheme, setDarkTheme] = useState(
+    localStorage.getItem("theme") || false,
+  );
   const notificationRef = useRef();
   const profileRef = useRef();
   const axiosPrivate = useAxiosPrivate();
@@ -20,6 +23,16 @@ function Header() {
   const { user, setUser } = useUserContext();
   const { notifications } = useNotificationsContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!darkTheme) {
+      localStorage.removeItem("theme");
+      document.documentElement.classList.remove("dark");
+    } else {
+      localStorage.setItem("theme", "dark");
+      document.documentElement.classList.add("dark");
+    }
+  }, [darkTheme]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -67,7 +80,7 @@ function Header() {
   };
 
   return (
-    <header className="text-slate-900 border-b border-b-slate-100">
+    <header className="text-slate-900 dark:text-slate-50 border-b border-b-slate-100 dark:border-b-slate-900">
       <nav className="h-10 max-w-4xl px-4 flex items-center justify-between w-full mx-auto">
         <Link to="/">Social Media</Link>
         <ul className="flex items-center gap-8">
@@ -101,6 +114,23 @@ function Header() {
                 {notifications.length}
               </span>
             )}
+          </li>
+
+          <li>
+            <button
+              type="button"
+              onClick={() => {
+                if (darkTheme) {
+                  localStorage.removeItem("theme");
+                  setDarkTheme(false);
+                } else {
+                  localStorage.setItem("theme", "dark");
+                  setDarkTheme(localStorage.getItem("theme"));
+                }
+              }}
+              className="text-sm font-semibold">
+              {localStorage.getItem("theme") ? "Light" : "Dark"}
+            </button>
           </li>
 
           <li className="relative" ref={profileRef}>

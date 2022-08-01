@@ -57,7 +57,7 @@ function Home() {
     content = <p>Loading...</p>;
   } else if (posts.length === 0) {
     content = (
-      <div className="p-4 text-yellow-600 bg-yellow-50 rounded">
+      <div className="p-4 my-4 text-yellow-600 bg-yellow-50 dark:text-yellow-50 dark:bg-yellow-600 rounded">
         No posts yet.
       </div>
     );

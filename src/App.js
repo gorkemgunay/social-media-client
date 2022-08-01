@@ -10,6 +10,10 @@ import Messages from "./pages/Messages";
 import { PersistLogin, Redirect } from "./components";
 
 function App() {
+  // const url =
+  //   "https://d9olupt5igjta.cloudfront.net/samples/sample_files/71017/6002484fa6ed0e3f78e984542caecdd0a4b3c6b6/mp3/_Discord_Message.mp3?1619010662";
+  // const audio = new Audio(url);
+
   return (
     <Routes>
       <Route element={<PersistLogin />}>
