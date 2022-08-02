@@ -18,7 +18,7 @@ export const useHandleFetchConversation = (conversationId) => {
       const data = response?.data;
 
       const orderedData = data.messages.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        (a, b) => b.createdAt - a.createdAt,
       );
 
       setMessages(orderedData);
