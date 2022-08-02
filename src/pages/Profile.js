@@ -141,6 +141,10 @@ function Profile() {
         }
       });
     }
+
+    return () => {
+      socket.off("getBiography");
+    };
   }, [profile]);
 
   const handleFetchFollow = async () => {
