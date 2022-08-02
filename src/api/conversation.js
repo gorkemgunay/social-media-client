@@ -16,12 +16,9 @@ export const useHandleFetchConversation = (conversationId) => {
         `/conversation/${conversationId}`,
       );
       const data = response?.data;
+      const messagesData = data.messages;
 
-      const orderedData = data.messages.sort(
-        (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-      );
-
-      setMessages(orderedData);
+      setMessages(messagesData);
 
       const filteredValue = data.users.find(
         (filterReceiver) => user?._id !== filterReceiver?._id,
