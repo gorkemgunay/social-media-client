@@ -97,6 +97,10 @@ function Profile() {
         }
       });
     }
+
+    return () => {
+      socket.off("getFollower");
+    };
   }, [profile]);
 
   useEffect(() => {
@@ -123,6 +127,10 @@ function Profile() {
         }
       });
     }
+
+    return () => {
+      socket.off("getUnfollower");
+    };
   }, [profile]);
 
   useEffect(() => {

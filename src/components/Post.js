@@ -148,7 +148,7 @@ function Post({ post, substring = false, showComments = false }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to={`/profile/${post?.user?._id}`}>
-              <small className="text-slate-400 capitalize">
+              <small className="text-slate-400 capitalize dark:text-slate-700">
                 {post.user.name} {post.user.surname}
               </small>
             </Link>
