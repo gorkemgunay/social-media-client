@@ -2,6 +2,8 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { useSocketContext } from "../contexts/SocketContext";
 import { useUserContext } from "../contexts/UserContext";
 import useAxiosPrivate from "../useAxiosPrivate";
@@ -19,6 +21,7 @@ function Post({ post, substring = false, showComments = false }) {
   const axiosPrivate = useAxiosPrivate();
   const { user } = useUserContext();
   const { comments, setComments } = useHandleFetchComments(post._id);
+  dayjs.extend(relativeTime);
 
   useEffect(() => {
     socket.on("getNewComment", (newComment) => {
@@ -143,11 +146,16 @@ function Post({ post, substring = false, showComments = false }) {
         {substring && post.body.length < 250 && <p>{post.body}</p>}
         {!substring && <p>{post.body}</p>}
         <div className="flex items-center justify-between">
-          <Link to={`/profile/${post?.user?._id}`}>
-            <small className="text-slate-400 capitalize">
-              {post.user.name} {post.user.surname}
+          <div className="flex items-center gap-4">
+            <Link to={`/profile/${post?.user?._id}`}>
+              <small className="text-slate-400 capitalize">
+                {post.user.name} {post.user.surname}
+              </small>
+            </Link>
+            <small className="text-xs text-gray-400 dark:text-slate-700">
+              {dayjs(new Date(post.createdAt).getTime()).fromNow()}
             </small>
-          </Link>
+          </div>
           {comments && comments?.length !== 0 && (
             <div>
               <small className="text-slate-400">

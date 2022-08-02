@@ -1,6 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import {
+  BellIcon,
+  ChatAlt2Icon,
+  HomeIcon,
+  MoonIcon,
+  SunIcon,
+  UserGroupIcon,
+  UserIcon,
+} from "@heroicons/react/outline";
 import { useUserContext } from "../contexts/UserContext";
 import NotificationsList from "./NotificationsList";
 import useAxiosPrivate from "../useAxiosPrivate";
@@ -84,16 +93,33 @@ function Header() {
       <nav className="h-10 max-w-4xl px-4 flex items-center justify-between w-full mx-auto">
         <Link to="/">Social Media</Link>
         <ul className="flex items-center gap-8">
-          <li>
-            <Link to="/">Home</Link>
+          <li className="relative group">
+            <Link to="/">
+              <HomeIcon className="w-6 h-6" />
+            </Link>
+            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+              Home
+            </span>
           </li>
 
-          <li>
-            <Link to="/users">Users</Link>
+          <li className="relative group">
+            <Link to="/users">
+              <UserGroupIcon className="w-6 h-6" />
+            </Link>
+
+            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+              Users
+            </span>
           </li>
 
-          <li>
-            <Link to="/messages">Messages</Link>
+          <li className="relative group">
+            <Link to="/messages">
+              <ChatAlt2Icon className="w-6 h-6" />
+            </Link>
+
+            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+              Messages
+            </span>
           </li>
 
           <li className="relative" ref={notificationRef}>
@@ -102,8 +128,13 @@ function Header() {
               onClick={() => {
                 setOpenNotification(!openNotification);
               }}
-              className="text-sm font-semibold relative z-[1]">
-              Notifications
+              className="flex items-center text-sm font-semibold relative group">
+              <BellIcon className="w-6 h-6" />
+              {!openNotification && (
+                <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                  Notifications
+                </span>
+              )}
             </button>
             <NotificationsList
               openNotification={openNotification}
@@ -128,8 +159,23 @@ function Header() {
                   setDarkTheme(localStorage.getItem("theme"));
                 }
               }}
-              className="text-sm font-semibold">
-              {localStorage.getItem("theme") ? "Light" : "Dark"}
+              className="relative flex items-center text-sm group font-semibold">
+              {localStorage.getItem("theme") ? (
+                <>
+                  <SunIcon className="w-6 h-6" />
+                  <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                    Light
+                  </span>
+                </>
+              ) : (
+                <>
+                  <MoonIcon className="w-6 h-6" />
+
+                  <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                    Dark
+                  </span>
+                </>
+              )}
             </button>
           </li>
 
@@ -137,8 +183,13 @@ function Header() {
             <button
               type="button"
               onClick={() => setOpenProfile(!openProfile)}
-              className="text-sm font-semibold">
-              {user?.name} {user?.surname}
+              className="relative flex items-center group text-sm font-semibold">
+              <UserIcon className="w-6 h-6" />
+              {!openProfile && (
+                <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                  {user?.name} {user?.surname}
+                </span>
+              )}
             </button>
             <ProfileMenu
               openProfile={openProfile}

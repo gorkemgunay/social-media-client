@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { Link, useParams } from "react-router-dom";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { Header, Form, Input, Button } from "../components";
 import { useSocketContext } from "../contexts/SocketContext";
@@ -19,6 +21,7 @@ function Conversation() {
   const { socket } = useSocketContext();
   const { notifications } = useNotificationsContext();
   const scrollRef = useRef();
+  dayjs.extend(relativeTime);
 
   useEffect(() => {
     if (user) {
@@ -143,18 +146,28 @@ function Conversation() {
                 <small className="self-end">
                   {user.name} {user.surname}
                 </small>
-                <p className="py-2 px-4 w-fit max-w-xs self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
-                  {message.text}
-                </p>
+                <div className="flex items-center gap-2">
+                  <small className="text-xs text-gray-400 dark:text-gray-700">
+                    {dayjs(new Date(message.createdAt).getTime()).fromNow()}
+                  </small>
+                  <p className="py-2 px-4 max-w-xs self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
+                    {message.text}
+                  </p>
+                </div>
               </div>
             ) : (
               <div key={message._id} ref={scrollRef} className="flex flex-col">
                 <small>
                   {receiver.name} {receiver.surname}
                 </small>
-                <p className="py-2 px-4 w-fit max-w-xs shadow dark:shadow-white/25 rounded-3xl">
-                  {message.text}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="py-2 px-4 w-fit max-w-xs shadow dark:shadow-white/25 rounded-3xl">
+                    {message.text}
+                  </p>
+                  <small className="text-xs text-gray-400 dark:text-gray-700">
+                    {dayjs(new Date(message.createdAt).getTime()).fromNow()}
+                  </small>
+                </div>
               </div>
             ),
           )}

@@ -2,10 +2,10 @@ import React from "react";
 
 function Loader() {
   return (
-    <div className="flex items-center justify-center absolute top-0 right-0 bottom-0 left-0 w-screen h-screen bg-white">
+    <div className="flex items-center justify-center absolute top-0 right-0 bottom-0 left-0 w-screen h-screen bg-white dark:bg-black">
       <svg
         role="status"
-        className="w-8 h-8 mr-2 text-indigo-200 animate-spin fill-indigo-600"
+        className="w-8 h-8 mr-2 text-indigo-200 animate-spin fill-indigo-600 dark:text-indigo-300 dark:fill-indigo-600"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +18,9 @@ function Loader() {
           fill="currentFill"
         />
       </svg>
-      <h3 className="text-xl text-indigo-600">Loading...</h3>
+      <h3 className="text-xl !text-indigo-600 dark:!text-indigo-600">
+        Loading...
+      </h3>
     </div>
   );
 }
