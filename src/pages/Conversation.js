@@ -56,6 +56,10 @@ function Conversation() {
         setMessages((prev) => [...prev, newMessage]);
       }
     });
+
+    return () => {
+      socket.off("getNewMessage");
+    };
   }, []);
 
   useEffect(() => {
@@ -116,7 +120,7 @@ function Conversation() {
     receiverContent = <p>Loading...</p>;
   } else if (receiver) {
     receiverContent = (
-      <div className="flex items-center gap-8 mb-4">
+      <div className="flex items-center gap-4 mb-4">
         <Link to={`/profile/${receiver._id}`}>
           <h2 className="inline-block capitalize">
             {receiver.name} {receiver.surname}

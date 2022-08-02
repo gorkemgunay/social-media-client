@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../useAxiosPrivate";
-import { Header, Footer, Button, Search } from "../components";
+import { Header, Footer, Button, UserSearch } from "../components";
 import { useUserContext } from "../contexts/UserContext";
 import { useSocketContext } from "../contexts/SocketContext";
 
@@ -101,7 +101,10 @@ function Users() {
       <div className="max-w-4xl mx-auto pt-8 px-4">
         <h2 className="mb-4">Users Page</h2>
         <div className="pb-4">
-          <Search users={users} setSearchUsersResult={setSearchUsersResult} />
+          <UserSearch
+            users={users}
+            setSearchUsersResult={setSearchUsersResult}
+          />
         </div>
         {content}
       </div>
