@@ -135,15 +135,20 @@ function Profile() {
 
   useEffect(() => {
     if (profile) {
-      socket.on("getBiography", (updatedBiography) => {
+      socket.on("getNewProfileSettings", (updatedBiography) => {
         if (updatedBiography.profileId === profile?._id) {
-          setProfile({ ...profile, biography: updatedBiography.biography });
+          setProfile({
+            ...profile,
+            name: updatedBiography.name,
+            surname: updatedBiography.surname,
+            biography: updatedBiography.biography,
+          });
         }
       });
     }
 
     return () => {
-      socket.off("getBiography");
+      socket.off("getNewProfileSettings");
     };
   }, [profile]);
 
