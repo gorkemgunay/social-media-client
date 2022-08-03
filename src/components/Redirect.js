@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import toast from "react-hot-toast";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "../contexts/AuthContext";
 import axios from "../axios";
@@ -17,7 +16,6 @@ function Redirect() {
       const data = response?.data;
       setAccessToken(data.accessToken);
       localStorage.setItem("user", data.refreshToken);
-      toast.success("You are already logged in.");
     };
     if (refreshToken) {
       fetchAuth();

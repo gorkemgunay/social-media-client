@@ -169,21 +169,24 @@ function Conversation() {
                   {user.name} {user.surname}
                 </small>
                 <div className="flex sm:items-center flex-col-reverse sm:flex-row gap-2">
-                  <small className="text-[0.625rem] self-end sm:text-sm text-gray-400 dark:text-gray-700">
+                  <small className="text-[0.625rem] self-end sm:self-center sm:text-sm text-gray-400 dark:text-gray-700">
                     {dayjs(new Date(message.createdAt).getTime()).fromNow()}
                   </small>
-                  <p className="text-xs sm:text-base py-2 px-4 max-w-xs w-fit self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
+                  <p className="text-xs sm:text-base py-2 px-4 max-w-full sm:max-w-xs w-fit self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
                     {message.text}
                   </p>
                 </div>
               </div>
             ) : (
-              <div key={message._id} ref={scrollRef} className="flex flex-col">
+              <div
+                key={message._id}
+                ref={scrollRef}
+                className="flex flex-col self-start">
                 <small>
                   {receiver.name} {receiver.surname}
                 </small>
                 <div className="flex sm:items-center flex-col sm:flex-row gap-2">
-                  <p className="text-xs sm:text-base py-2 px-4 w-fit max-w-xs shadow dark:shadow-white/25 rounded-3xl">
+                  <p className="text-xs sm:text-base py-2 px-4 self-start max-w-full w-fit sm:max-w-xs shadow dark:shadow-white/25 rounded-3xl">
                     {message.text}
                   </p>
                   <small className="text-[0.625rem] sm:text-sm text-gray-400 dark:text-gray-700">
