@@ -84,7 +84,7 @@ function Post({ post, substring = false, showComments = false }) {
         />
 
         <Button
-          className="text-sm flex-shrink-0 self-end"
+          className="text-xs flex-shrink-0 self-end sm:text-sm"
           disabled={
             !formik.values.text || !formik.isValid || formik.isSubmitting
           }

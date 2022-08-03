@@ -38,44 +38,47 @@ function UpdatePost({ post, setShowModal }) {
   });
   return (
     <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center transition-all bg-black/40">
-      <Form
-        className="max-w-4xl w-full flex-col p-8 bg-white dark:bg-slate-900 rounded-xl"
-        onSubmit={formik.handleSubmit}>
-        <h3>Update Post</h3>
-        <Input
-          name="title"
-          label="Post Title"
-          placeholder="Please enter post title."
-          onChange={formik.handleChange}
-          value={formik.values.title}
-          error={formik.errors.title}
-        />
-        <Textarea
-          name="body"
-          label="Post Body"
-          placeholder="Please enter post content."
-          onChange={formik.handleChange}
-          value={formik.values.body}
-          error={formik.errors.body}
-        />
-        <Button
-          className="text-sm"
-          disabled={
-            !formik.values.title ||
-            !formik.values.body ||
-            !formik.isValid ||
-            formik.isSubmitting
-          }
-          loading={formik.isSubmitting}>
-          Update Post
-        </Button>
-        <Button
-          type="button"
-          className="bg-red-500 dark:bg-red-700 text-sm"
-          onClick={() => setShowModal(false)}>
-          Close
-        </Button>
-      </Form>
+      <div className="max-w-4xl w-full px-4">
+        <Form
+          className="w-full flex-col p-8 bg-white dark:bg-slate-900 rounded-xl"
+          onSubmit={formik.handleSubmit}>
+          <h3>Update Post</h3>
+          <Input
+            name="title"
+            label="Post Title"
+            placeholder="Please enter post title."
+            onChange={formik.handleChange}
+            value={formik.values.title}
+            error={formik.errors.title}
+          />
+          <Textarea
+            name="body"
+            label="Post Body"
+            placeholder="Please enter post content."
+            onChange={formik.handleChange}
+            value={formik.values.body}
+            error={formik.errors.body}
+            className="h-10"
+          />
+          <Button
+            className="text-xs sm:text-sm h-6 sm:h-10"
+            disabled={
+              !formik.values.title ||
+              !formik.values.body ||
+              !formik.isValid ||
+              formik.isSubmitting
+            }
+            loading={formik.isSubmitting}>
+            Update Post
+          </Button>
+          <Button
+            type="button"
+            className="bg-red-500 dark:bg-red-700 text-xs sm:text-sm h-6 sm:h-10"
+            onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }

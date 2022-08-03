@@ -15,9 +15,9 @@ function Comment({ comment }) {
   dayjs.extend(relativeTime);
 
   return (
-    <div className="flex flex-col gap-2 p-4 border border-slate-100 dark:border-slate-900 rounded">
+    <div className="flex flex-col gap-4 p-4 border border-slate-100 dark:border-slate-900 rounded">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex sm:items-center flex-col sm:flex-row gap-4">
           <Link to={`/profile/${comment.user._id}`}>
             <small className="text-slate-400 capitalize">
               {comment.user.name} {comment.user.surname}

@@ -57,9 +57,10 @@ function CreatePost({ setShowModal }) {
           onChange={formik.handleChange}
           value={formik.values.body}
           error={formik.errors.body}
+          className="h-10"
         />
         <Button
-          className="text-sm"
+          className="text-xs sm:text-sm h-6 sm:h-10"
           disabled={
             !formik.values.title ||
             !formik.values.body ||
@@ -71,7 +72,7 @@ function CreatePost({ setShowModal }) {
         </Button>
         <Button
           type="button"
-          className="bg-red-500 dark:bg-red-700 text-sm"
+          className="bg-red-500 dark:bg-red-700 text-xs sm:text-sm h-6 sm:h-10"
           onClick={() => setShowModal(false)}>
           Close
         </Button>
