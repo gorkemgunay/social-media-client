@@ -16,16 +16,21 @@ function ProfileSettings({ profile, setShowModal }) {
     initialValues: {
       name: profile?.name,
       surname: profile?.surname,
+      email: profile?.email,
       biography: profile?.biography,
     },
     onSubmit: async (values) => {
       const response = await axiosPrivate.post("/user/update", {
+        name: values.name,
+        surname: values.surname,
         biography: values.biography,
       });
       const data = response?.data;
       if (data) {
-        socket.emit("updateBiography", {
+        socket.emit("updateProfileSettings", {
           profileId: profile?._id,
+          name: values.name,
+          surname: values.surname,
           biography: values.biography,
         });
         toast.success("Profile updated successfully.");
@@ -46,7 +51,6 @@ function ProfileSettings({ profile, setShowModal }) {
           onChange={formik.handleChange}
           value={formik.values.name}
           error={formik.errors.name}
-          disabled
         />
         <Input
           name="surname"
@@ -55,8 +59,15 @@ function ProfileSettings({ profile, setShowModal }) {
           onChange={formik.handleChange}
           value={formik.values.surname}
           error={formik.errors.surname}
+        />
+
+        <Input
+          name="email"
+          label="Email"
+          value={formik.values.email}
           disabled
         />
+
         <Textarea
           name="biography"
           label="Profile Biography"
