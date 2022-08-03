@@ -16,8 +16,8 @@ function Notification({ id, type, sender, relatedId, setOpenNotification }) {
         className="flex items-center gap-1 min-h-[56px] py-2 px-4 text-sm
       cursor-pointer transition-colors bg-white hover:bg-slate-50
       dark:bg-slate-900 hover:dark:bg-slate-800">
-        <p className="font-normal w-56">
-          <span className="font-semibold">
+        <p className="font-normal text-xs sm:text-base w-56">
+          <span className="font-semibold text-xs sm:text-base">
             {sender.name} {sender.surname}
           </span>{" "}
           send you a {type}.

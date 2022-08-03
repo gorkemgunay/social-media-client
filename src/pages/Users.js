@@ -57,8 +57,8 @@ function Users() {
       <div className="max-h-96 overflow-scroll flex flex-col gap-4">
         {searchUsersResult.map((currentUser) => (
           <div key={currentUser._id}>
-            <div className="flex items-center justify-between gap-4 px-4 py-4 h-16 rounded border border-slate-100 dark:border-slate-900">
-              <p className="text-sm font-semibold capitalize">
+            <div className="flex items-center sm:justify-between flex-col sm:flex-row gap-4 px-4 py-4 h-24 sm:h-16 rounded border border-slate-100 dark:border-slate-900">
+              <p className="text-sm font-semibold">
                 {currentUser.name} {currentUser.surname}
               </p>
               <div className="flex items-center gap-4">

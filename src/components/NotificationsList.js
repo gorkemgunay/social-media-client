@@ -56,7 +56,7 @@ function NotificationsList({ openNotification, setOpenNotification }) {
     <div
       className={`absolute top-10 right-0 ${
         !openNotification && "hidden"
-      } flex flex-col w-80 shadow bg-white dark:bg-slate-900 overflow-hidden rounded`}>
+      } flex flex-col w-60 md:w-80 shadow bg-white dark:bg-slate-900 overflow-hidden rounded`}>
       {notifications.map((conversation) => (
         <Notification
           key={conversation._id}

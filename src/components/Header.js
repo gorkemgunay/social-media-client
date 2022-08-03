@@ -90,14 +90,16 @@ function Header() {
 
   return (
     <header className="text-slate-900 dark:text-slate-50 border-b border-b-slate-100 dark:border-b-slate-900">
-      <nav className="h-10 max-w-4xl px-4 flex items-center justify-between w-full mx-auto">
-        <Link to="/">Social Media</Link>
-        <ul className="flex items-center gap-8">
+      <nav className="h-10 max-w-4xl px-4 flex items-center justify-center sm:justify-between w-full mx-auto">
+        <Link to="/" className="hidden sm:inline-block">
+          Social Media
+        </Link>
+        <ul className="flex items-center gap-5 sm:gap-8">
           <li className="relative group">
             <Link to="/">
               <HomeIcon className="w-6 h-6" />
             </Link>
-            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
               Home
             </span>
           </li>
@@ -107,7 +109,7 @@ function Header() {
               <UserGroupIcon className="w-6 h-6" />
             </Link>
 
-            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
               Users
             </span>
           </li>
@@ -117,7 +119,7 @@ function Header() {
               <ChatAlt2Icon className="w-6 h-6" />
             </Link>
 
-            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+            <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 -bottom-9 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
               Messages
             </span>
           </li>
@@ -131,7 +133,7 @@ function Header() {
               className="flex items-center text-sm font-semibold relative group">
               <BellIcon className="w-6 h-6" />
               {!openNotification && (
-                <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
                   Notifications
                 </span>
               )}
@@ -163,7 +165,7 @@ function Header() {
               {localStorage.getItem("theme") ? (
                 <>
                   <SunIcon className="w-6 h-6" />
-                  <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                  <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
                     Light
                   </span>
                 </>
@@ -171,7 +173,7 @@ function Header() {
                 <>
                   <MoonIcon className="w-6 h-6" />
 
-                  <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                  <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
                     Dark
                   </span>
                 </>
@@ -186,7 +188,7 @@ function Header() {
               className="relative flex items-center group text-sm font-semibold">
               <UserIcon className="w-6 h-6" />
               {!openProfile && (
-                <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 group-hover:flex items-center justify-center">
+                <span className="absolute hidden text-xs font-semibold px-2 py-0.5 w-fit bg-black dark:bg-white rounded text-slate-50 dark:text-slate-900 top-10 left-1/2 -translate-x-1/2 sm:group-hover:flex items-center justify-center">
                   {user?.name} {user?.surname}
                 </span>
               )}

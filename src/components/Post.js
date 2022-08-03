@@ -150,8 +150,8 @@ function Post({ post, substring = false, showComments = false }) {
         )}
         {substring && post.body.length < 250 && <p>{post.body}</p>}
         {!substring && <p>{post.body}</p>}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between flex-col gap-4 sm:items-center sm:gap-0 sm:flex-row">
+          <div className="flex sm:items-center flex-col sm:flex-row gap-4">
             <Link to={`/profile/${post?.user?._id}`}>
               <small className="text-slate-400 capitalize dark:text-slate-700">
                 {post.user.name} {post.user.surname}

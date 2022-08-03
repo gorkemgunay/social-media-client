@@ -50,7 +50,7 @@ function Messages() {
                           navigate(`/conversation/${data._id}`);
                         }
                       }}
-                      className="w-full flex items-center justify-between gap-4 px-4 py-4 h-16 bg-white dark:bg-black rounded border border-slate-100 dark:border-slate-900">
+                      className="w-full flex items-center sm:justify-between flex-col gap-4 sm:flex-row px-4 py-4 h-24 sm:h-16 bg-white dark:bg-black rounded border border-slate-100 dark:border-slate-900">
                       <p className="text-sm font-semibold capitalize">
                         {u.name} {u.surname}
                       </p>

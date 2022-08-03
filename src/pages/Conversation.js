@@ -168,11 +168,11 @@ function Conversation() {
                 <small className="self-end">
                   {user.name} {user.surname}
                 </small>
-                <div className="flex items-center gap-2">
-                  <small className="text-xs text-gray-400 dark:text-gray-700">
+                <div className="flex sm:items-center flex-col-reverse sm:flex-row gap-2">
+                  <small className="text-[0.625rem] self-end sm:text-sm text-gray-400 dark:text-gray-700">
                     {dayjs(new Date(message.createdAt).getTime()).fromNow()}
                   </small>
-                  <p className="py-2 px-4 max-w-xs w-fit self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
+                  <p className="text-xs sm:text-base py-2 px-4 max-w-xs w-fit self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
                     {message.text}
                   </p>
                 </div>
@@ -182,11 +182,11 @@ function Conversation() {
                 <small>
                   {receiver.name} {receiver.surname}
                 </small>
-                <div className="flex items-center gap-2">
-                  <p className="py-2 px-4 w-fit max-w-xs shadow dark:shadow-white/25 rounded-3xl">
+                <div className="flex sm:items-center flex-col sm:flex-row gap-2">
+                  <p className="text-xs sm:text-base py-2 px-4 w-fit max-w-xs shadow dark:shadow-white/25 rounded-3xl">
                     {message.text}
                   </p>
-                  <small className="text-xs text-gray-400 dark:text-gray-700">
+                  <small className="text-[0.625rem] sm:text-sm text-gray-400 dark:text-gray-700">
                     {dayjs(new Date(message.createdAt).getTime()).fromNow()}
                   </small>
                 </div>
@@ -220,7 +220,7 @@ function Conversation() {
               !formik.values.text.trim().length
             }
             loading={formik.isSubmitting}
-            className="text-sm flex-shrink-0 self-end">
+            className="text-xs flex-shrink-0 self-end sm:text-sm">
             Send Message
           </Button>
         </Form>

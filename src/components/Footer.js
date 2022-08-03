@@ -37,7 +37,7 @@ function Footer() {
     );
   } else if (onlineUsers) {
     content = onlineUsers.map((online) => (
-      <p key={online._id} className="text-sm capitalize">
+      <p key={online._id} className="text-sm">
         {online.name} {online.surname}
       </p>
     ));
