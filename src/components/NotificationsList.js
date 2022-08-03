@@ -63,6 +63,7 @@ function NotificationsList({ openNotification, setOpenNotification }) {
           id={conversation._id}
           type={conversation.type}
           sender={conversation.sender}
+          relatedId={conversation.relatedId}
           setOpenNotification={setOpenNotification}
         />
       ))}

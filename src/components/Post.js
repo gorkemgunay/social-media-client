@@ -17,6 +17,7 @@ import UpdatePost from "./modals/UpdatePost";
 
 function Post({ post, substring = false, showComments = false }) {
   const [showModal, setShowModal] = useState(false);
+  const [disableDeleteButton, setDisableDeleteButton] = useState(false);
   const { socket } = useSocketContext();
   const axiosPrivate = useAxiosPrivate();
   const { user } = useUserContext();
@@ -125,7 +126,9 @@ function Post({ post, substring = false, showComments = false }) {
               <Button
                 type="button"
                 className="primary-small-btn"
+                disabled={disableDeleteButton}
                 onClick={async () => {
+                  setDisableDeleteButton(true);
                   const response = await axiosPrivate.delete(
                     `/posts/${post._id}`,
                   );
@@ -133,7 +136,9 @@ function Post({ post, substring = false, showComments = false }) {
                   if (data) {
                     socket.emit("deletePost", data);
                     toast.success("Post deleted successfully.");
+                    setDisableDeleteButton(false);
                   }
+                  setDisableDeleteButton(false);
                 }}>
                 Delete
               </Button>
