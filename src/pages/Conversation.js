@@ -13,6 +13,7 @@ import { useNotificationsContext } from "../contexts/NotificationsContext";
 function Conversation() {
   const [onlineUsers, setOnlineUsers] = useState(null);
   const [online, setOnline] = useState(false);
+  const [windowFocus, setWindowFocus] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { conversationId } = useParams();
   const { messages, setMessages, receiver } =
@@ -66,6 +67,39 @@ function Conversation() {
     scrollRef.current?.scrollIntoView();
   }, [messages]);
 
+  useEffect(() => {
+    window.addEventListener("focus", () => setWindowFocus(true));
+    window.addEventListener("blur", () => setWindowFocus(false));
+    return () => {
+      window.removeEventListener("focus", () => setWindowFocus(true));
+      window.removeEventListener("blur", () => setWindowFocus(false));
+    };
+  }, []);
+
+  useEffect(() => {
+    const deleteNotificationAuto = () => {
+      const getFilteredNotification = notifications.find(
+        (n) => n.receiver === user?._id && n.sender._id === receiver?._id,
+      );
+      const handleDeleteNotification = async () => {
+        const response = await axiosPrivate.delete(
+          `/notification/${getFilteredNotification?._id}`,
+        );
+        const data = response?.data;
+        if (data) {
+          socket.emit("deleteMessageNotification", data);
+        }
+      };
+      if (getFilteredNotification && notifications) {
+        handleDeleteNotification();
+      }
+    };
+
+    if (windowFocus) {
+      deleteNotificationAuto();
+    }
+  }, [user, receiver, notifications, windowFocus]);
+
   const formik = useFormik({
     initialValues: {
       text: "",
@@ -80,39 +114,23 @@ function Conversation() {
       if (data) {
         const notification = await axiosPrivate.post("/notification", {
           type: "message",
-          receiverId: receiver._id,
+          receiverId: receiver?._id,
+          relatedId: conversationId,
         });
         socket.emit("createMessage", {
           ...data,
-          receiverId: receiver._id,
+          receiverId: receiver?._id,
         });
         socket.emit("createMessageNotification", {
           ...notification?.data,
           sender: user,
+          relatedId: conversationId,
         });
         values.text = "";
       }
       values.text = "";
     },
   });
-
-  useEffect(() => {
-    const getFilteredNotification = notifications.find(
-      (n) => n.receiver === user?._id && n.sender._id === receiver?._id,
-    );
-    const handleDeleteNotification = async () => {
-      const response = await axiosPrivate.delete(
-        `/notification/${getFilteredNotification?._id}`,
-      );
-      const data = response?.data;
-      if (data) {
-        socket.emit("deleteMessageNotification", data);
-      }
-    };
-    if (getFilteredNotification && notifications) {
-      handleDeleteNotification();
-    }
-  }, [user, receiver, notifications]);
 
   let receiverContent;
   let messagesContent;
@@ -154,7 +172,7 @@ function Conversation() {
                   <small className="text-xs text-gray-400 dark:text-gray-700">
                     {dayjs(new Date(message.createdAt).getTime()).fromNow()}
                   </small>
-                  <p className="py-2 px-4 max-w-xs self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
+                  <p className="py-2 px-4 max-w-xs w-fit self-end bg-indigo-600 text-slate-50 dark:bg-indigo-800 rounded-3xl">
                     {message.text}
                   </p>
                 </div>
