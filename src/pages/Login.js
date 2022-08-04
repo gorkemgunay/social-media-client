@@ -70,11 +70,11 @@ function Login() {
             formik.isSubmitting
           }
           loading={formik.isSubmitting}
-          className="w-full text-sm">
+          className="text-xs sm:text-sm h-6 sm:h-10">
           Login
         </Button>
       </Form>
-      <p className="mt-4 text-sm text-slate-400">
+      <p className="mt-4 text-xs sm:text-sm text-slate-400">
         Don&apos;t have an account?{" "}
         <Link to="/register" className="text-indigo-600">
           Register

@@ -8,19 +8,19 @@ import { Header, Form, Input, Button } from "../components";
 import { useSocketContext } from "../contexts/SocketContext";
 import { useHandleFetchUser } from "../api/user";
 import { useHandleFetchConversation } from "../api/conversation";
-import { useNotificationsContext } from "../contexts/NotificationsContext";
+// import { useNotificationsContext } from "../contexts/NotificationsContext";
 
-function Conversation() {
+function GroupConversation() {
   const [onlineUsers, setOnlineUsers] = useState(null);
-  const [online, setOnline] = useState(false);
-  const [windowFocus, setWindowFocus] = useState(true);
+  // const [online, setOnline] = useState(false);
+  // const [windowFocus, setWindowFocus] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { conversationId } = useParams();
   const { messages, setMessages, receiver } =
     useHandleFetchConversation(conversationId);
   const { user } = useHandleFetchUser();
   const { socket } = useSocketContext();
-  const { notifications } = useNotificationsContext();
+  // const { notifications } = useNotificationsContext();
   const scrollRef = useRef();
   dayjs.extend(relativeTime);
 
@@ -44,12 +44,13 @@ function Conversation() {
     };
   }, []);
 
-  useEffect(() => {
-    if (receiver) {
-      const isOnline = onlineUsers.some((u) => u._id === receiver?._id);
-      setOnline(isOnline);
-    }
-  }, [receiver, onlineUsers]);
+  // useEffect(() => {
+  //   if (receiver) {
+  //     const isOnline = onlineUsers.some((u) => u._id === receiver?._id);
+  //     console.log(isOnline);
+  //     setOnline(isOnline);
+  //   }
+  // }, [receiver, onlineUsers]);
 
   useEffect(() => {
     socket.on("getNewMessage", (newMessage) => {
@@ -67,38 +68,38 @@ function Conversation() {
     scrollRef.current?.scrollIntoView();
   }, [messages]);
 
-  useEffect(() => {
-    window.addEventListener("focus", () => setWindowFocus(true));
-    window.addEventListener("blur", () => setWindowFocus(false));
-    return () => {
-      window.removeEventListener("focus", () => setWindowFocus(true));
-      window.removeEventListener("blur", () => setWindowFocus(false));
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("focus", () => setWindowFocus(true));
+  //   window.addEventListener("blur", () => setWindowFocus(false));
+  //   return () => {
+  //     window.removeEventListener("focus", () => setWindowFocus(true));
+  //     window.removeEventListener("blur", () => setWindowFocus(false));
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const deleteNotificationAuto = () => {
-      const getFilteredNotification = notifications.find(
-        (n) => n.receiver === user?._id && n.sender._id === receiver?._id,
-      );
-      const handleDeleteNotification = async () => {
-        const response = await axiosPrivate.delete(
-          `/notification/${getFilteredNotification?._id}`,
-        );
-        const data = response?.data;
-        if (data) {
-          socket.emit("deleteMessageNotification", data);
-        }
-      };
-      if (getFilteredNotification && notifications) {
-        handleDeleteNotification();
-      }
-    };
-
-    if (windowFocus) {
-      deleteNotificationAuto();
-    }
-  }, [user, receiver, notifications, windowFocus]);
+  // useEffect(() => {
+  //   const deleteNotificationAuto = () => {
+  //     const getFilteredNotification = notifications.find(
+  //       (n) => n.receiver === user?._id && n.sender._id === receiver?._id,
+  //     );
+  //     const handleDeleteNotification = async () => {
+  //       const response = await axiosPrivate.delete(
+  //         `/notification/${getFilteredNotification?._id}`,
+  //       );
+  //       const data = response?.data;
+  //       if (data) {
+  //         socket.emit("deleteMessageNotification", data);
+  //       }
+  //     };
+  //     if (getFilteredNotification && notifications) {
+  //       handleDeleteNotification();
+  //     }
+  //   };
+  //
+  //   if (windowFocus) {
+  //     deleteNotificationAuto();
+  //   }
+  // }, [user, receiver, notifications, windowFocus]);
 
   const formik = useFormik({
     initialValues: {
@@ -112,20 +113,24 @@ function Conversation() {
       });
       const data = response?.data;
       if (data) {
-        const notification = await axiosPrivate.post("/notification", {
-          type: "message",
-          receiverId: receiver?._id,
-          relatedId: conversationId,
-        });
-        socket.emit("createMessage", {
+        // const notification = await axiosPrivate.post("/notification", {
+        //   type: "message",
+        //   receiverId: receiver?._id,
+        //   relatedId: conversationId,
+        // });
+        const receivers = onlineUsers.filter((o) =>
+          receiver.find((r) => r._id === o._id),
+        );
+        socket.emit("createGroupMessage", {
           ...data,
-          receiverId: receiver?._id,
+          user: { ...user },
+          receiversIds: receivers,
         });
-        socket.emit("createMessageNotification", {
-          ...notification?.data,
-          sender: user,
-          relatedId: conversationId,
-        });
+        // socket.emit("createMessageNotification", {
+        //   ...notification?.data,
+        //   sender: user,
+        //   relatedId: conversationId,
+        // });
         values.text = "";
       }
       values.text = "";
@@ -139,19 +144,13 @@ function Conversation() {
   } else if (receiver) {
     receiverContent = (
       <div className="flex items-center gap-4 mb-4">
-        <Link to={`/profile/${receiver._id}`}>
-          <h2 className="inline-block capitalize">
-            {receiver.name} {receiver.surname}
-          </h2>
-        </Link>
-        <p
-          className={`text-sm rounded px-2 font-semibold ${
-            online
-              ? "!bg-green-100 !text-green-600"
-              : "!bg-red-100 !text-red-600"
-          }`}>
-          {online ? "Online" : "Offline"}
-        </p>
+        {receiver.map((r) => (
+          <Link key={r._id} to={`/profile/${r._id}`}>
+            <h2 className="inline-block capitalize">
+              {r.name} {r.surname}
+            </h2>
+          </Link>
+        ))}
       </div>
     );
     if (!messages) {
@@ -183,7 +182,7 @@ function Conversation() {
                 ref={scrollRef}
                 className="flex flex-col self-start">
                 <small>
-                  {receiver.name} {receiver.surname}
+                  {message.user.name} {message.user.surname}
                 </small>
                 <div className="flex sm:items-center flex-col sm:flex-row gap-2">
                   <div className="text-xs break-words whitespace-normal sm:text-sm py-2 px-4 self-start max-w-full w-fit sm:max-w-xs shadow dark:shadow-white/25 rounded-3xl">
@@ -232,4 +231,4 @@ function Conversation() {
   );
 }
 
-export default Conversation;
+export default GroupConversation;

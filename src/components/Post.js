@@ -153,7 +153,7 @@ function Post({ post, substring = false, showComments = false }) {
         <div className="flex justify-between flex-col gap-4 sm:items-center sm:gap-0 sm:flex-row">
           <div className="flex sm:items-center flex-col sm:flex-row gap-4">
             <Link to={`/profile/${post?.user?._id}`}>
-              <small className="text-slate-400 capitalize dark:text-slate-700">
+              <small className="text-slate-400 dark:text-slate-700">
                 {post.user.name} {post.user.surname}
               </small>
             </Link>
@@ -163,7 +163,7 @@ function Post({ post, substring = false, showComments = false }) {
           </div>
           {comments && comments?.length !== 0 && (
             <div>
-              <small className="text-slate-400">
+              <small className="text-slate-400 dark:text-slate-700">
                 {comments?.length <= 1
                   ? `${comments?.length} comment`
                   : `${comments?.length} comments`}

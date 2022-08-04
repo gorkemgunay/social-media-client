@@ -57,7 +57,7 @@ function CreatePost({ setShowModal }) {
           onChange={formik.handleChange}
           value={formik.values.body}
           error={formik.errors.body}
-          className="h-10"
+          className="h-10 sm:h-full"
         />
         <Button
           className="text-xs sm:text-sm h-6 sm:h-10"

@@ -99,11 +99,11 @@ function Register() {
             formik.isSubmitting
           }
           loading={formik.isSubmitting}
-          className="w-full text-sm">
+          className="text-xs sm:text-sm h-6 sm:h-10">
           Register
         </Button>
       </Form>
-      <p className="mt-4 text-sm text-slate-400">
+      <p className="mt-4 text-xs sm:text-sm text-slate-400">
         Have an account?{" "}
         <Link to="/login" className="text-indigo-600">
           Login

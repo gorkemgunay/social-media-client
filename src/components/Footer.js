@@ -37,7 +37,7 @@ function Footer() {
     );
   } else if (onlineUsers) {
     content = onlineUsers.map((online) => (
-      <p key={online._id} className="text-sm">
+      <p key={online._id} className="text-xs sm:text-sm">
         {online.name} {online.surname}
       </p>
     ));
@@ -46,7 +46,7 @@ function Footer() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <h4 className="mb-4">Active Users</h4>
-      <div className="flex items-center gap-4">{content}</div>
+      <div className="flex items-center gap-4 flex-wrap">{content}</div>
     </div>
   );
 }

@@ -20,10 +20,17 @@ export const useHandleFetchConversation = (conversationId) => {
 
       setMessages(messagesData);
 
-      const filteredValue = data.users.find(
-        (filterReceiver) => user?._id !== filterReceiver?._id,
-      );
-      setReceiver(filteredValue);
+      if (data.users.length === 2) {
+        const filteredValue = data.users.find(
+          (filterReceiver) => user?._id !== filterReceiver?._id,
+        );
+        setReceiver(filteredValue);
+      } else {
+        const filteredValue = data.users.filter(
+          (filterReceiver) => user?._id !== filterReceiver?._id,
+        );
+        setReceiver(filteredValue);
+      }
     };
     if (user) {
       getConversation();
@@ -50,4 +57,42 @@ export const useHandleFetchUserConversations = () => {
   }, [conversations]);
 
   return { conversations, setConversations };
+};
+
+export const useHandleFetchGroupConversations = () => {
+  const [groupConversations, setGroupConversations] = useState(null);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    const getGroupConversations = async () => {
+      const response = await axiosPrivate.get("/conversation/group");
+      const data = response?.data;
+      setGroupConversations(data);
+    };
+    if (!groupConversations) {
+      getGroupConversations();
+    }
+  }, [groupConversations]);
+
+  return { groupConversations, setGroupConversations };
+};
+
+export const useHandleFetchUserGroupConversations = () => {
+  const [groupConversations, setGroupConversations] = useState(null);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    const getGroupConversations = async () => {
+      const response = await axiosPrivate.get("/conversation/group");
+      const data = response?.data;
+      setGroupConversations(data);
+    };
+    if (!groupConversations) {
+      getGroupConversations();
+    }
+  }, [groupConversations]);
+
+  return { groupConversations, setGroupConversations };
 };

@@ -14,7 +14,7 @@ function ProfileMenu({ openProfile, setOpenProfile, user, handleLogout }) {
       </Link>
 
       <Link
-        to={`/profile/${user?._id}`}
+        to={`/profile/settings/${user?._id}`}
         onClick={() => setOpenProfile(false)}
         className="flex items-center justify-between gap-1 h-14 px-4 text-xs sm:text-sm cursor-pointer transition-colors bg-white hover:bg-slate-50 dark:bg-slate-900 hover:dark:bg-slate-800">
         Settings

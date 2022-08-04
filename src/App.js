@@ -7,14 +7,12 @@ import Profile from "./pages/Profile";
 import Article from "./pages/Article";
 import Users from "./pages/Users";
 import Conversation from "./pages/Conversation";
+import GroupConversation from "./pages/GroupConversation";
 import Messages from "./pages/Messages";
+import ProfileSettings from "./pages/ProfileSettings";
 import { PersistLogin, Redirect } from "./components";
 
 function App() {
-  // const url =
-  //   "https://d9olupt5igjta.cloudfront.net/samples/sample_files/71017/6002484fa6ed0e3f78e984542caecdd0a4b3c6b6/mp3/_Discord_Message.mp3?1619010662";
-  // const audio = new Audio(url);
-
   useEffect(() => {
     const dark = localStorage.getItem("theme");
     if (dark) {
@@ -27,12 +25,17 @@ function App() {
       <Route element={<PersistLogin />}>
         <Route index path="/" element={<Home />} />
         <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/profile/settings/:userId" element={<ProfileSettings />} />
         <Route path="/post/:postId" element={<Article />} />
         <Route path="/users" element={<Users />} />
         <Route path="/messages" element={<Messages />} />
         <Route
           path="/conversation/:conversationId"
           element={<Conversation />}
+        />
+        <Route
+          path="/conversation/group/:conversationId"
+          element={<GroupConversation />}
         />
       </Route>
       <Route element={<Redirect />}>
