@@ -7,7 +7,6 @@ import Profile from "./pages/Profile";
 import Article from "./pages/Article";
 import Users from "./pages/Users";
 import Conversation from "./pages/Conversation";
-import GroupConversation from "./pages/GroupConversation";
 import Messages from "./pages/Messages";
 import ProfileSettings from "./pages/ProfileSettings";
 import { PersistLogin, Redirect } from "./components";
@@ -32,10 +31,6 @@ function App() {
         <Route
           path="/conversation/:conversationId"
           element={<Conversation />}
-        />
-        <Route
-          path="/conversation/group/:conversationId"
-          element={<GroupConversation />}
         />
       </Route>
       <Route element={<Redirect />}>

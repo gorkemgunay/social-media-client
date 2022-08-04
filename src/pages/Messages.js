@@ -21,12 +21,17 @@ function Messages() {
 
   useEffect(() => {
     socket.on("getConversation", (newConversation) => {
-      setConversations((prev) => [...prev, newConversation]);
+      const checkConversation = conversations?.some(
+        (c) => c._id === newConversation._id,
+      );
+      if (!checkConversation) {
+        setConversations((prev) => [...prev, newConversation]);
+      }
     });
     return () => {
       socket.off("getConversation");
     };
-  }, []);
+  }, [conversations]);
 
   let conversationsContent;
   let groupConversationsContent;
@@ -54,7 +59,7 @@ function Messages() {
                   {u.name} {u.surname}
                 </p>
                 {notifications.some(
-                  (notification) => notification.sender._id === u._id,
+                  (notification) => notification.relatedId === conversation._id,
                 ) && (
                   <div className="p-2 text-xs text-yellow-600 bg-yellow-50 dark:text-yellow-50 dark:bg-yellow-600 rounded">
                     You have unread messages.
@@ -81,7 +86,7 @@ function Messages() {
             });
             const data = response?.data;
             if (data) {
-              navigate(`/conversation/group/${data._id}`);
+              navigate(`/conversation/${data._id}`);
             }
           }}
           className="w-full flex items-center sm:justify-between flex-col gap-4 sm:flex-row px-4 py-4 h-24 sm:h-16 bg-white dark:bg-black rounded border border-slate-100 dark:border-slate-900">
@@ -95,6 +100,13 @@ function Messages() {
                 ),
             )}
           </p>
+          {notifications.some(
+            (notification) => notification.relatedId === groupConversation._id,
+          ) && (
+            <div className="p-2 text-xs text-yellow-600 bg-yellow-50 dark:text-yellow-50 dark:bg-yellow-600 rounded">
+              You have unread messages.
+            </div>
+          )}
         </Button>
       </div>
     ));

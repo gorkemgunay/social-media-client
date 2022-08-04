@@ -12,7 +12,7 @@ import { useNotificationsContext } from "../contexts/NotificationsContext";
 
 function Conversation() {
   const [onlineUsers, setOnlineUsers] = useState(null);
-  const [online, setOnline] = useState(false);
+  // const [online, setOnline] = useState(false);
   const [windowFocus, setWindowFocus] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { conversationId } = useParams();
@@ -44,12 +44,13 @@ function Conversation() {
     };
   }, []);
 
-  useEffect(() => {
-    if (receiver) {
-      const isOnline = onlineUsers.some((u) => u._id === receiver?._id);
-      setOnline(isOnline);
-    }
-  }, [receiver, onlineUsers]);
+  // useEffect(() => {
+  //   if (receiver) {
+  //     const isOnline = onlineUsers.some((u) => u._id === receiver?._id);
+  //     console.log(isOnline);
+  //     setOnline(isOnline);
+  //   }
+  // }, [receiver, onlineUsers]);
 
   useEffect(() => {
     socket.on("getNewMessage", (newMessage) => {
@@ -79,7 +80,10 @@ function Conversation() {
   useEffect(() => {
     const deleteNotificationAuto = () => {
       const getFilteredNotification = notifications.find(
-        (n) => n.receiver === user?._id && n.sender._id === receiver?._id,
+        (n) =>
+          n.receiver === user?._id &&
+          receiver?.find((r) => r._id === n.sender._id) &&
+          n.relatedId === conversationId,
       );
       const handleDeleteNotification = async () => {
         const response = await axiosPrivate.delete(
@@ -112,19 +116,26 @@ function Conversation() {
       });
       const data = response?.data;
       if (data) {
-        const notification = await axiosPrivate.post("/notification", {
-          type: "message",
-          receiverId: receiver?._id,
-          relatedId: conversationId,
+        receiver.map(async (r) => {
+          const notification = await axiosPrivate.post("/notification", {
+            type: "message",
+            receiverId: r?._id,
+            relatedId: conversationId,
+          });
+
+          socket.emit("createMessageNotification", {
+            ...notification?.data,
+            sender: user,
+            relatedId: conversationId,
+          });
         });
+        const receivers = onlineUsers.filter((o) =>
+          receiver.find((r) => r._id === o._id),
+        );
         socket.emit("createMessage", {
           ...data,
-          receiverId: receiver?._id,
-        });
-        socket.emit("createMessageNotification", {
-          ...notification?.data,
-          sender: user,
-          relatedId: conversationId,
+          user: { ...user },
+          receiversIds: receivers,
         });
         values.text = "";
       }
@@ -139,19 +150,13 @@ function Conversation() {
   } else if (receiver) {
     receiverContent = (
       <div className="flex items-center gap-4 mb-4">
-        <Link to={`/profile/${receiver._id}`}>
-          <h2 className="inline-block capitalize">
-            {receiver.name} {receiver.surname}
-          </h2>
-        </Link>
-        <p
-          className={`text-sm rounded px-2 font-semibold ${
-            online
-              ? "!bg-green-100 !text-green-600"
-              : "!bg-red-100 !text-red-600"
-          }`}>
-          {online ? "Online" : "Offline"}
-        </p>
+        {receiver?.map((r) => (
+          <Link key={r._id} to={`/profile/${r._id}`}>
+            <h2 className="inline-block capitalize">
+              {r.name} {r.surname}
+            </h2>
+          </Link>
+        ))}
       </div>
     );
     if (!messages) {
@@ -183,7 +188,7 @@ function Conversation() {
                 ref={scrollRef}
                 className="flex flex-col self-start">
                 <small>
-                  {receiver.name} {receiver.surname}
+                  {message.user.name} {message.user.surname}
                 </small>
                 <div className="flex sm:items-center flex-col sm:flex-row gap-2">
                   <div className="text-xs break-words whitespace-normal sm:text-sm py-2 px-4 self-start max-w-full w-fit sm:max-w-xs shadow dark:shadow-white/25 rounded-3xl">

@@ -21,7 +21,7 @@ export const useHandleFetchConversation = (conversationId) => {
       setMessages(messagesData);
 
       if (data.users.length === 2) {
-        const filteredValue = data.users.find(
+        const filteredValue = data.users.filter(
           (filterReceiver) => user?._id !== filterReceiver?._id,
         );
         setReceiver(filteredValue);
