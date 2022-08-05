@@ -12,7 +12,7 @@ import { useNotificationsContext } from "../contexts/NotificationsContext";
 
 function Conversation() {
   const [onlineUsers, setOnlineUsers] = useState(null);
-  // const [online, setOnline] = useState(false);
+  const [onlines, setOnlines] = useState(null);
   const [windowFocus, setWindowFocus] = useState(true);
   const axiosPrivate = useAxiosPrivate();
   const { conversationId } = useParams();
@@ -44,13 +44,14 @@ function Conversation() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (receiver) {
-  //     const isOnline = onlineUsers.some((u) => u._id === receiver?._id);
-  //     console.log(isOnline);
-  //     setOnline(isOnline);
-  //   }
-  // }, [receiver, onlineUsers]);
+  useEffect(() => {
+    if (receiver) {
+      const onlineUsersArray = receiver.map((r) =>
+        onlineUsers.find((o) => o._id === r._id),
+      );
+      setOnlines(onlineUsersArray);
+    }
+  }, [receiver, onlineUsers]);
 
   useEffect(() => {
     socket.on("getNewMessage", (newMessage) => {
@@ -151,11 +152,22 @@ function Conversation() {
     receiverContent = (
       <div className="flex items-center gap-4 mb-4">
         {receiver?.map((r) => (
-          <Link key={r._id} to={`/profile/${r._id}`}>
-            <h2 className="inline-block capitalize">
-              {r.name} {r.surname}
-            </h2>
-          </Link>
+          <div key={r._id} className="flex items-center gap-2">
+            <Link to={`/profile/${r._id}`}>
+              <h2 className="inline-block capitalize text-sm sm:text-base">
+                {r.name} {r.surname}
+              </h2>
+            </Link>
+            {onlines?.some((o) => o?._id === r?._id) ? (
+              <div className="flex items-center justify-center h-5 px-1 bg-green-50 text-green-600 rounded text-xs sm:text-sm font-semibold">
+                Online
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-5 px-1 bg-red-50 text-red-600 rounded text-xs sm:text-sm font-semibold">
+                Offline
+              </div>
+            )}
+          </div>
         ))}
       </div>
     );
