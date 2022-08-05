@@ -103,7 +103,7 @@ function Conversation() {
     if (windowFocus) {
       deleteNotificationAuto();
     }
-  }, [user, receiver, notifications, windowFocus]);
+  }, [user, receiver, notifications, windowFocus, conversationId]);
 
   const formik = useFormik({
     initialValues: {
