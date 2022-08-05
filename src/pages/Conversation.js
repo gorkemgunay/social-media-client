@@ -63,7 +63,7 @@ function Conversation() {
     return () => {
       socket.off("getNewMessage");
     };
-  }, []);
+  }, [conversationId]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
