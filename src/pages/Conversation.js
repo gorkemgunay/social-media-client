@@ -175,7 +175,7 @@ function Conversation() {
       messagesContent = <p>Loading...</p>;
     } else if (messages) {
       messagesContent = (
-        <div className="p-8 flex flex-col gap-4 h-[calc(100vh-224px)] border border-slate-100 dark:border-slate-900 rounded-lg overflow-y-scroll">
+        <div className="p-8 flex flex-col gap-4 h-[calc(100vh-224px)] border border-slate-100 dark:border-slate-900 rounded-lg overflow-y-scroll overflow-x-hidden">
           {messages.map((message) =>
             message.user._id === user?._id ? (
               <div
@@ -203,7 +203,7 @@ function Conversation() {
                   {message.user.name} {message.user.surname}
                 </small>
                 <div className="flex sm:items-center flex-col sm:flex-row gap-2">
-                  <div className="text-xs break-words whitespace-normal sm:text-sm py-2 px-4 self-start max-w-full w-fit sm:max-w-xs shadow dark:shadow-white/25 rounded-3xl">
+                  <div className="text-xs break-words whitespace-normal sm:text-sm py-2 px-4 self-start max-w-full sm:max-w-xs w-fit shadow dark:shadow-white/25 rounded-3xl">
                     {message.text}
                   </div>
                   <small className="text-[0.625rem] sm:text-sm text-gray-400 dark:text-gray-700">

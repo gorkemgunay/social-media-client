@@ -10,7 +10,7 @@ import Input from "../Input";
 import Textarea from "../Textarea";
 import Button from "../Button";
 
-function UpdatePost({ post, setShowModal }) {
+function UpdatePost({ post, setShowUpdate }) {
   const { socket } = useSocketContext();
   const { user } = useUserContext();
   const axiosPrivate = useAxiosPrivate();
@@ -32,7 +32,7 @@ function UpdatePost({ post, setShowModal }) {
         values.title = "";
         values.body = "";
         toast.success("Post updated successfully.");
-        setShowModal(false);
+        setShowUpdate(false);
       }
     },
   });
@@ -74,7 +74,7 @@ function UpdatePost({ post, setShowModal }) {
           <Button
             type="button"
             className="bg-red-500 dark:bg-red-700 text-xs sm:text-sm h-6 sm:h-10"
-            onClick={() => setShowModal(false)}>
+            onClick={() => setShowUpdate(false)}>
             Close
           </Button>
         </Form>

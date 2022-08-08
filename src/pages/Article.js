@@ -39,7 +39,7 @@ function Article() {
   if (!post) {
     content = <p>Loading...</p>;
   } else if (post) {
-    content = <Post post={post} showComments />;
+    content = <Post post={post} showComments showLike />;
   }
 
   return (

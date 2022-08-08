@@ -16,5 +16,6 @@ export { default as UpdatePost } from "./modals/UpdatePost";
 export { default as ProfileSettings } from "./modals/ProfileSettings";
 export { default as Followers } from "./modals/Followers";
 export { default as Following } from "./modals/Following";
+export { default as Likes } from "./modals/Likes";
 export { default as PersistLogin } from "./PersistLogin";
 export { default as Redirect } from "./Redirect";
